@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 export default function TicketCard ({ticket} : {ticket: Ticket}) {
-    return <Card className="rounded-[10.96px] border-[1.57px] p-[3.13px] gap-0 max-w-[280px] min-w-[280px] max-h-[375.32px]">
+    return <Card className="rounded-[10.96px] border-[1.57px] p-[3.13px] gap-0 xl:max-w-[280px] sm:min-w-[280px] max-h-[375.32px]">
         <div className="relative overflow-hidden border-[#E9E9E9] border-[0.78px] rounded-[8.7px] w-full h-[194px]">
             <div className="absolute top-[10px] text-xs left-[10px] z-10 bg-blur-[12.51] bg-[#FFFFFF99] px-[9.38px] border-[#E9E9E9] border-[0.39px] rounded-[6.26px] py-[4.69px] flex items-center gap-1.5">
                {ticket.anonymous && (
@@ -74,8 +74,8 @@ export default function TicketCard ({ticket} : {ticket: Ticket}) {
                     }
                     </div>
                 </div>
-                <div className="flex gap-x-3">
-                   <div className="flex gap-x-1.5">
+                <div className="flex flex-wrap gap-y-1.5 gap-x-3">
+                   <span className="flex gap-x-1.5">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M10.6666 1.33301V3.99967M5.33331 1.33301V3.99967" stroke="#5C6170" strokeWidth="1.30181" strokeLinecap="round" strokeLinejoin="round"/>
                             <path d="M8.66667 2.6665H7.33333C4.81917 2.6665 3.5621 2.6665 2.78105 3.44755C2 4.2286 2 5.48568 2 7.99984V9.33317C2 11.8473 2 13.1044 2.78105 13.8854C3.5621 14.6665 4.81917 14.6665 7.33333 14.6665H8.66667C11.1808 14.6665 12.4379 14.6665 13.2189 13.8854C14 13.1044 14 11.8473 14 9.33317V7.99984C14 5.48568 14 4.2286 13.2189 3.44755C12.4379 2.6665 11.1808 2.6665 8.66667 2.6665Z" stroke="#5C6170" strokeWidth="1.30181" strokeLinecap="round" strokeLinejoin="round"/>
@@ -83,14 +83,14 @@ export default function TicketCard ({ticket} : {ticket: Ticket}) {
                             <path d="M7.99698 9.33301H8.00298M7.99698 11.9997H8.00298M10.6606 9.33301H10.6666M5.33331 9.33301H5.33929M5.33331 11.9997H5.33929" stroke="#5C6170" strokeWidth="1.73575" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         <p className="text-[12px] text-[#5C6170]">{formatDate(ticket.event_date)}</p>
-                    </div> 
-                   <div className="flex gap-x-1.5">
+                    </span> 
+                   <span className="flex gap-x-1.5">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8.00004 14.6663C11.6819 14.6663 14.6667 11.6816 14.6667 7.99967C14.6667 4.31778 11.6819 1.33301 8.00004 1.33301C4.31814 1.33301 1.33337 4.31778 1.33337 7.99967C1.33337 11.6816 4.31814 14.6663 8.00004 14.6663Z" stroke="#5C6170" strokeWidth="1.30181"/>
                         <path d="M7.99994 5.33301V7.99967L9.33327 9.33301" stroke="#5C6170" strokeWidth="1.30181" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                         <p className="text-[12px] text-[#5C6170]">{ticket.event_time_in_utc}</p>
-                    </div> 
+                    </span> 
                 </div>
                 <div className="flex gap-x-3">
                    <div className="flex gap-x-1.5">

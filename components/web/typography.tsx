@@ -6,11 +6,11 @@ import { cn } from "@/lib/utils";
 const typographyVariants = cva("text-foreground", {
     variants: {
         variant: {
-            h1: " text-[40px] lg:text-[64px] font-bold tracking-[-5%] leading-[100%]",
-            h2: "scroll-m-20 pb-2 text-[24px] lg:text-[40px] font-bold tracking-tight first:mt-0",
-            h3: "scroll-m-20 text-[24px] lg:text-[32px] font-semibold tracking-tight",
-            h4: "scroll-m-20 text-xl font-semibold tracking-tight",
-            p: "leading-7 [&:not(:first-child)]:mt-6",
+            h1: "text-[40px] lg:text-[64px] font-bold tracking-tight leading-[120%]",
+            h2: "text-[#2C0A4A] text-[24px] tracking-tight lg:text-[40px] font-bold leading-[100%] first:mt-0",
+            h3: "text-[#2C0A4A] text-[24px] lg:text-[32px] font-semibold tracking-tight",
+            h4: "text-[#2C0A4A] text-[18px] font-semibold tracking-tight",
+            p: "leading-5 [&:not(:first-child)]:mt-2.5",
             blockquote: "mt-6 border-l-2 pl-6 italic",
             table: "w-full",
             list: "my-6 ml-6 list-disc [&>li]:mt-2",
