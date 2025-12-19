@@ -8,7 +8,7 @@ const typographyVariants = cva("text-foreground", {
         variant: {
             h1: "text-[40px] lg:text-[64px] font-bold tracking-tight leading-[120%]",
             h2: "text-[#2C0A4A] text-[24px] tracking-tight lg:text-[40px] font-bold leading-[100%] first:mt-0",
-            h3: "text-[#2C0A4A] text-[24px] lg:text-[32px] font-semibold tracking-tight",
+            h3: "text-[#2C0A4A] text-[24px] lg:text-[32px] font-semibold tracking-tighter",
             h4: "text-[#2C0A4A] text-[18px] font-semibold tracking-tight",
             p: "leading-5 [&:not(:first-child)]:mt-2.5",
             blockquote: "mt-6 border-l-2 pl-6 italic",

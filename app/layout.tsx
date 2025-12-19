@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Footer } from "@/components/web/footer";
+import { Navbar } from "@/components/web/navbar";
 
 const satoshi = localFont({
   src: [
@@ -102,8 +104,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${satoshi.variable} ${inter.variable} font-sans antialiased`}>{children}</body>
-
+      <body className={`${satoshi.variable} ${inter.variable} bg-[#F6F0FB] font-sans antialiased`}>
+        <Navbar />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }

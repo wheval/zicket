@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 export default function TicketCard ({ticket} : {ticket: Ticket}) {
-    return <Card className="rounded-[10.96px] border-[1.57px] p-[3.13px] gap-0 xl:max-w-[280px] sm:min-w-[280px] max-h-[375.32px]">
+    return <Card className="rounded-[10.96px] border-[1.57px] group p-[3.13px] gap-0 xl:max-w-[280px] sm:min-w-[280px] max-h-[375.32px]">
         <div className="relative overflow-hidden border-[#E9E9E9] border-[0.78px] rounded-[8.7px] w-full h-[194px]">
             <div className="absolute top-[10px] text-xs left-[10px] z-10 bg-blur-[12.51] bg-[#FFFFFF99] px-[9.38px] border-[#E9E9E9] border-[0.39px] rounded-[6.26px] py-[4.69px] flex items-center gap-1.5">
                {ticket.anonymous && (
@@ -33,7 +33,7 @@ export default function TicketCard ({ticket} : {ticket: Ticket}) {
                 src={ticket.image ?? "/images/tickets/ticket_1.png"} 
                 width={280} 
                 height={194}
-                className="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
             />
         </div> 
         <CardContent className="py-[12px] px-[8px]">

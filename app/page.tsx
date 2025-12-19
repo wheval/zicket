@@ -2,6 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/web/typography";
 import TicketCard from "@/components/web/ticket";
 import { Navbar } from "@/components/web/navbar";
+import { FAQ } from "@/components/web/faq";
+import { NewsCard } from "@/components/web/news-card";
+import { newsItems } from "@/lib/mock_data";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { tickets } from "@/lib/mock_data";
@@ -65,7 +68,7 @@ export default function Page() {
         },
     ]
     
-    return <main>
+    return <main className="bg-[#F6F0FB]">
         <section className="relative overflow-hidden h-[86dvh] bg-[url('/images/bg.png')] bg-cover bg-center">
             <Navbar />
             <div className="relative z-20 flex flex-col items-center justify-center h-full text-center max-w-4xl mx-auto px-4 gap-8">
@@ -95,13 +98,13 @@ export default function Page() {
                 </div>
             </div>
         </section>
-        <section className="bg-[#F6F0FB] py-16">
-            <div className="mx-auto flex flex-col items-center justify-center">
+        <section className="py-16">
+            <div className="mx-auto px-4 lg:px-8 xl:px-12 container flex flex-col items-center justify-center">
                 <Typography variant="h2">
                     How it Works
                 </Typography>
                 <Typography className="font-medium mb-12 tracking-tight" variant="p">Privacy-Powered Events in 3 steps </Typography>
-                <div className="flex justify-betweenv gap-x-6">
+                <div className="flex justify-between gap-x-6">
                     { howItWorksCard.map((how, index) => (
                          <div key={index} className="bg-[#FBFAF9] max-w-[396px] rounded-[16px] p-5">
                             <Image alt="" src={how.icon} width={80} height={80}/>
@@ -113,25 +116,27 @@ export default function Page() {
             </div>
             <div className="w-full flex justify-center items-center">
                 <div className="inline-flex text-center py-24 mt-10 text-[#2C0A4A] w-[14ch] text-[80px]">
-                    <span className="tracking-tighter leading-[100%]">No Signups <Image className="inline" alt="" src="/images/shield.png"  width={80} height={80}/> required to explore events </span>
+                    <span className="tracking-tighter leading-[100%]">No Signups <Image className="inline" alt="" src="/images/shield_blur.png"  width={80} height={80}/> required to explore events </span>
                 </div>
             </div>
         </section>
-        <section className="bg-white py-16">
-            <div className="px-4 lg:px-8 xl:px-12 mb-6 xl:mb-8 flex justify-between items-center">
+        <section className="bg-white rounded-[32px] py-16">
+            <div className="px-4 container mx-auto lg:px-8 xl:px-12 mb-6 xl:mb-8 flex justify-between items-center">
                 <Typography variant="h3">Trending Now on Zicket</Typography>
                 <Button variant="link">Browse Events</Button>
             </div>
-            <div className="max-w-full overflow-hidden pl-8 xl:pl-12">
-                <div className="flex flex-col sm:flex-row sm:overflow-x-scroll sm:scroll-smooth sm:snap-x sm:snap-mandatory gap-x-6 gap-y-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    {tickets.map((ticket, index) => (
+            <div className="max-w-full overflow-hidden">
+                <div className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <div className="shrink-0 w-4 lg:w-8 xl:w-12" />
+                    {tickets.map((ticket) => (
                         <div 
                             key={ticket.id} 
-                            className={`sm:snap-start shrink-0 ${index === 0 ? 'sm:scroll-ml-10' : ''} ${index === tickets.length - 1 ? 'sm:scroll-mr-10 mr-10' : ''}`}
+                            className="snap-start shrink-0"
                         >
                             <TicketCard ticket={ticket} />
                         </div>
                     ))}
+                    <div className="shrink-0 w-4 lg:w-8 xl:w-12" />
                 </div>
             </div>
             <div className="container mx-auto px-4 lg:px-8 xl:px-12 py-20 flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-20">
@@ -157,6 +162,42 @@ export default function Page() {
                             ))
                         }
                     </div>
+                </div>
+            </div>
+        </section>
+        <FAQ />
+        <section className="bg-white py-24 mb-10">
+            <div className="container mx-auto px-4 flex flex-col items-center text-center gap-6">
+                <div className="max-w-3xl space-y-4 mb-5">
+                    <Typography variant="h2">
+                        Host in Peace. No <br /> Spreadsheets or Stalkers.
+                    </Typography>
+                    <Typography variant="p" className="tracking-tight max-w-lg mx-auto font-medium">
+                        Zicket gives creators and organizers tools to launch, ticket, and manage events without compromising guest privacy.
+                    </Typography>
+                </div>
+                <Button variant="outline">
+                    Host An Event
+                </Button>
+            </div>
+        </section>
+
+        <section className="py-20">
+            <div className="container mx-auto px-4 lg:px-8 xl:px-12">
+                <div className="flex justify-between items-center mb-10">
+                    <Typography variant="h3" className="tracking-tighter">Trending News</Typography>
+                    <Button variant="link">See All News</Button>
+                </div>
+            </div>
+            <div className="w-full">
+                <div className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <div className="shrink-0 w-4 lg:w-8 xl:w-12" />
+                        {newsItems.map((news, index) => (
+                            <div key={news.id} className={`snap-start shrink-0 ${index === 0 ? 'sm:scroll-ml-10 ml-10' : ''} ${index === newsItems.length - 1 ? 'sm:scroll-mr-10 mr-10' : ''}`}>
+                                <NewsCard news={news} />
+                            </div>
+                        ))}
+                    <div className="shrink-0 w-4 lg:w-8 xl:w-12" />
                 </div>
             </div>
         </section>

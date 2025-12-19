@@ -9,7 +9,7 @@ export function Navbar() {
         <div className="flex items-center justify-between rounded-full bg-[#FFFFFF]/80 border border-[#E4E4E4] px-4 lg:px-6 py-3 backdrop-blur-xl">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <Image src="/zicket.png" alt="Zicket logo" width={80} height={18} />
+              <Image src="/logo-dark.png" alt="Zicket logo" width={80} height={18} />
             </div>
             <nav className="hidden md:flex items-center gap-4 text-sm text-[#172233]">
               <Link href="/" >Explore</Link>

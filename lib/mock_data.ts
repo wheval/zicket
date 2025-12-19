@@ -389,3 +389,90 @@ export const tickets: Ticket[] = [
         event_verified: false
     },
 ]
+export interface NewsItem {
+    id: string;
+    image: string;
+    category: string;
+    date: string;
+    title: string;
+    description: string;
+    author: {
+        name: string;
+        avatar: string;
+    };
+}
+
+export const newsItems: NewsItem[] = [
+    {
+        id: "1",
+        image: "/images/news/news_1.jpg",
+        category: "Tech",
+        date: "03 June, 2025",
+        title: "Zicket x Builders: A Hack Night Recap",
+        description: "How the dev crowd used Zicket for a private demo series.",
+        author: {
+            name: "ZKC Node",
+            avatar: "/images/avatars/avatar_1.png",
+        },
+    },
+    {
+        id: "2",
+        image: "/images/news/news_2.jpg",
+        category: "Ecosystem",
+        date: "03 June, 2025",
+        title: "CircleDrop Format Explained",
+        description: "Smaller, faster events for high-trust groups.",
+        author: {
+            name: "Indie Venue Club",
+            avatar: "/images/avatars/avatar_2.png",
+        },
+    },
+    {
+        id: "3",
+        image: "/images/news/news_3.jpg",
+        category: "Behind the Scenes",
+        date: "03 June, 2025",
+        title: "Designing for Private Discovery",
+        description: "Why our interface hides what doesn't matter.",
+        author: {
+            name: "Studio Delta",
+            avatar: "/images/avatars/avatar_3.png",
+        },
+    },
+    {
+        id: "4",
+        image: "/images/news/news_1.jpg",
+        category: "Tech",
+        date: "03 June, 2025",
+        title: "Zicket x Builders: A Hack Night Recap",
+        description: "How the dev crowd used Zicket for a private demo series.",
+        author: {
+            name: "ZKC Node",
+            avatar: "/images/avatars/avatar_1.png",
+        },
+    },
+    {
+        id: "4",
+        image: "/images/news/news_1.jpg",
+        category: "Tech",
+        date: "03 June, 2025",
+        title: "Zicket x Builders: A Hack Night Recap",
+        description: "How the dev crowd used Zicket for a private demo series.",
+        author: {
+            name: "ZKC Node",
+            avatar: "/images/avatars/avatar_1.png",
+        },
+    },
+    {
+        id: "5",
+        image: "/images/news/news_2.jpg",
+        category: "Tech & Crypto",
+        date: "03 June, 2025",
+        title: "Zicket x Builders: A Hack Night Recap",
+        description: "How the dev crowd used Zicket for a private demo series.",
+        author: {
+            name: "ZKC Node",
+            avatar: "/images/avatars/avatar_1.png",
+        },
+    },
+];
