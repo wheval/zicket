@@ -13,11 +13,13 @@ export function Navbar() {
       <div className="container mx-auto px-4 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between rounded-full bg-[#FFFFFF]/80 border border-[#E4E4E4] px-4 lg:pl-6 py-3 backdrop-blur-xl">
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 mr-4 2xl:mr-12">
-              <Image src="/logo-dark.png" alt="Zicket logo" className="min-w-[80px] min-h-[18px]" width={80} height={18} />
-            </div>
+            <Link href="/">
+              <div className="flex items-center gap-2 mr-4 2xl:mr-12">
+                <Image src="/logo-dark.png" alt="Zicket logo" className="min-w-[80px] min-h-[18px]" width={80} height={18} />
+              </div>
+            </Link>
             <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-[#172233]">
-              <Link href="/" className="flex items-center gap-1.5">
+              <Link href="/explore" className="flex items-center gap-1.5">
                 Explore 
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m6 9 6 6 6-6"/>

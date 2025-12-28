@@ -1,21 +1,28 @@
-import { Button } from "@/components/ui/button";
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import { tickets } from "@/lib/mock_data";
+import { 
+    CareerIcon, 
+    ArtIcon, 
+    CryptoIcon, 
+    MusicIcon, 
+    PanelIcon, 
+    VibeIcon, 
+    WellnessIcon, 
+    WorkshopIcon 
+} from "@/components/svgs/SVG";
 import { Typography } from "@/components/web/typography";
+import { Button } from "@/components/ui/button";
 import TicketCard from "@/components/web/ticket";
 import { Navbar } from "@/components/web/navbar";
 import { FAQ } from "@/components/web/faq";
 import { NewsCard } from "@/components/web/news-card";
 import { newsItems } from "@/lib/mock_data";
-import type { Metadata } from "next";
-import Image from "next/image";
-import { tickets } from "@/lib/mock_data";
-
-export const metadata: Metadata = {
-    title: "Home",
-    description: "Zicket - The anonymous ticketing platform.",
-};
-
 
 export default function Page() {
+    const [hoveredTool, setHoveredTool] = useState<number | null>(null);
     const howItWorksCard = [
         {
             icon: "/images/discover.png",
@@ -35,35 +42,35 @@ export default function Page() {
     ];
     const toolsCard = [
         {
-            icon: "/images/svgs/crypto_meetup.svg",
+            icon: CryptoIcon,
             text: "Web3 & Crypto Meetups"
         },
         {
-            icon: "/images/svgs/career.svg",
+            icon: CareerIcon,
             text: "Career & Innovation"
         },
         {
-            icon: "/images/svgs/art.svg",
+            icon: ArtIcon,
             text: "Art & Digital Culture"
         },
         {
-            icon: "/images/svgs/music.svg",
+            icon: MusicIcon,
             text: "Music & Nightlife"
         },
         {
-            icon: "/images/svgs/wellness.svg",
+            icon: WellnessIcon,
             text: "Wellness & Retreats"
         },
         {
-            icon: "/images/svgs/panel.svg",
+            icon: PanelIcon,
             text: "Talks & Panels"
         },
         {
-            icon: "/images/svgs/workshop.svg",
+            icon: WorkshopIcon,
             text: "Workshops & Builder Labs"
         },
         {
-            icon: "/images/svgs/vibe.svg",
+            icon: VibeIcon,
             text: "Social & Underground Vibes"
         },
     ]
@@ -154,14 +161,24 @@ export default function Page() {
                 <div className="flex-1 flex justify-end">
                     <div className="grid grid-cols-4 place-items-start gap-4 max-w-[620px]">
                         {
-                            toolsCard.map((tool, index) => (
-                                <div key={index} className="flex flex-col group items-center justify-center">
-                                    <div className="flex border-[0.56px] w-[69.16px] h-[69.16px] lg:w-[134.03px] lg:h-[134.03px] border-[#797979] group-hover:bg-yellow rounded-[8.94px] flex-col items-center justify-center">
-                                        <Image src={tool.icon} alt={tool.text} className="w-[29.24px] h-[25.93px] lg:w-auto lg:h-auto" width={56.67} height={50.26}/>
+                            toolsCard.map((tool, index) => {
+                                const Icon = tool.icon;
+                                return (
+                                    <div 
+                                        key={index} 
+                                        className="flex flex-col group items-center justify-center"
+                                        onMouseEnter={() => setHoveredTool(index)}
+                                        onMouseLeave={() => setHoveredTool(null)}
+                                    >
+                                        <div className="flex border-[0.56px] w-[69.16px] h-[69.16px] lg:w-[134.03px] lg:h-[134.03px] border-[#797979] group-hover:bg-[#F5E6D3] rounded-[8.94px] flex-col items-center justify-center transition-colors duration-100">
+                                            <div className="transition-transform duration-100 group-hover:scale-125">
+                                                <Icon color={hoveredTool === index ? "#6917AF" : "#404040"} />
+                                            </div>
+                                        </div>
+                                        <Typography className="font-bold mt-2 tracking-tight text-xs text-center text-[#1E1E1E]" variant="p">{tool.text}</Typography>
                                     </div>
-                                    <Typography className="font-bold mt-2 tracking-tight text-xs text-center text-[#1E1E1E]" variant="p">{tool.text}</Typography>
-                                </div>
-                            ))
+                                );
+                            })
                         }
                     </div>
                 </div>

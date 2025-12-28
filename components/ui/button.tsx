@@ -135,7 +135,7 @@ function Button({
   if (variant === "default") {
     return (
       <div className={cn(
-        "inline-block border border-[#4B107C] rounded-full p-0!",
+        "inline-block border border-b-2 border-[#4B107C] rounded-full p-0!",
         hasShadow && "shadow-[0_12px_16px_0_rgba(117,26,198,0.24)]",
         className 
       )}>
