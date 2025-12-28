@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Inter } from "next/font/google";
+import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/web/footer";
 import { Navbar } from "@/components/web/navbar";
@@ -66,6 +66,11 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage",
+});
+
 export const metadata: Metadata = {
   title: {
     template: "%s | Zicket",
@@ -104,7 +109,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${satoshi.variable} ${inter.variable} bg-[#F6F0FB] font-sans antialiased`}>
+      <body className={`${satoshi.variable} ${inter.variable} ${bricolage.variable} bg-[#F6F0FB] font-sans antialiased`}>
         <Navbar />
         {children}
         <Footer />

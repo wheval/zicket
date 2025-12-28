@@ -82,14 +82,13 @@ export default function Page() {
                     </Typography>
                 </div>
 
-                <Button showIcon className="rounded-full bg-linear-to-r from-[#693DED] to-[#9D7AFF] hover:opacity-90 transition-opacity px-8 py-6 text-lg">
+                <Button showIcon hasShadow className="md:text-lg">
                     Explore Events Anonymously
                 </Button>
 
                 <div className="absolute bottom-12 left-0 right-0 flex flex-col items-center gap-4">
-                    <div className="flex items-center gap-4 px-4 py-2 rounded-lg">
-                        <span className="text-sm font-medium text-gray-400">Trust markers</span>
-                        <div className="h-4 w-px bg-white/10"></div>
+                    <div className="flex flex-col md:flex-row items-center gap-6 lg:gap-8 px-4 py-2 rounded-lg">
+                        <span className="text-sm bg-[#D1B7E6] px-3 py-1.5 text-[#2C0A4A] font-bold">Trust markers</span>
                         <div className="flex items-center gap-4">
                             <Image src="/images/starknet.png" alt="Starknet's logo" width={105} height={24}/>
                             <Image src="/images/aztec.png" alt="Aztec's logo" width={93.32} height={24}/>
@@ -104,10 +103,10 @@ export default function Page() {
                     How it Works
                 </Typography>
                 <Typography className="font-medium mb-12 tracking-tight" variant="p">Privacy-Powered Events in 3 steps </Typography>
-                <div className="flex justify-between gap-x-6">
+                <div className="flex flex-col md:flex-row justify-between gap-y-4 gap-x-6">
                     { howItWorksCard.map((how, index) => (
-                         <div key={index} className="bg-[#FBFAF9] max-w-[396px] rounded-[16px] p-5">
-                            <Image alt="" src={how.icon} width={80} height={80}/>
+                         <div key={index} className="bg-[#FBFAF9] sm:max-w-[396px] rounded-[16px] p-5">
+                            <Image alt="" src={how.icon} className="w-[40px] h-[40px] lg:w-[80px] lg:h-[80px]" width={80} height={80}/>
                             <Typography className="capitalize mt-2" variant="h4">{how.title}</Typography>
                             <Typography className="font-medium pb-0 mb-0 mt-0" variant="p">{how.desc}</Typography>
                         </div>
@@ -115,32 +114,35 @@ export default function Page() {
                 </div>
             </div>
             <div className="w-full flex justify-center items-center">
-                <div className="inline-flex text-center py-24 mt-10 text-[#2C0A4A] w-[14ch] text-[80px]">
-                    <span className="tracking-tighter leading-[100%]">No Signups <Image className="inline" alt="" src="/images/shield_blur.png"  width={80} height={80}/> required to explore events </span>
+                <div className="inline-flex text-center pt-6 lg:py-24 mt-10 text-[#2C0A4A] w-[14ch] text-[40px] lg:text-[80px]">
+                    <span className="tracking-tighter leading-[100%]">No Signups <Image className="inline w-[40px] h-[40px] lg:w-[80px] lg:h-[80px]" alt="" src="/images/shield_blur.png"  width={80} height={80}/> required to explore events </span>
                 </div>
             </div>
         </section>
         <section className="bg-white rounded-[32px] py-16">
             <div className="px-4 container mx-auto lg:px-8 xl:px-12 mb-6 xl:mb-8 flex justify-between items-center">
-                <Typography variant="h3">Trending Now on Zicket</Typography>
+                <Typography variant="h3">Trending Now <span className="hidden ld:inherit">on Zicket</span></Typography>
                 <Button variant="link">Browse Events</Button>
             </div>
             <div className="max-w-full overflow-hidden">
-                <div className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    <div className="shrink-0 w-4 lg:w-8 xl:w-12" />
+                <div className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-4 md:gap-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    {/* Dynamic Spacer: Adjusted to subtract the gap (1.5rem / 24px) to maintain pixel-perfect alignment */}
+                    <div className="snap-start shrink-0 w-0 md:w-[calc((100vw-768px)/2+1rem-1.5rem)] lg:w-[calc((100vw-1024px)/2+2rem-1.5rem)] xl:w-[calc((100vw-1280px)/2+3rem-1.5rem)] 2xl:w-[calc((100vw-1536px)/2+3rem-1.5rem)]" />
+                    
                     {tickets.map((ticket) => (
                         <div 
                             key={ticket.id} 
-                            className="snap-start shrink-0"
+                            className="snap-start shrink-0 w-[280px]"
                         >
                             <TicketCard ticket={ticket} />
                         </div>
                     ))}
-                    <div className="shrink-0 w-4 lg:w-8 xl:w-12" />
+
+                    <div className="shrink-0 w-0 md:w-[calc((100vw-768px)/2+1rem-1.5rem)] lg:w-[calc((100vw-1024px)/2+2rem-1.5rem)] xl:w-[calc((100vw-1280px)/2+3rem-1.5rem)] 2xl:w-[calc((100vw-1536px)/2+3rem-1.5rem)]" />
                 </div>
             </div>
-            <div className="container mx-auto px-4 lg:px-8 xl:px-12 py-20 flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-20">
-                <div className="max-w-2xl lg:basis-5/12 space-y-5">
+            <div className="container mx-auto px-4 lg:px-8 xl:px-12 py-20 flex flex-col md:flex-row lg:items-center gap-12 lg:gap-20">
+                <div className="max-w-2xl md:basis-5/12 space-y-5">
                     <Typography variant="h3">
                         Powerful Tools for <br /> Public or Private Events.
                     </Typography>
@@ -150,12 +152,12 @@ export default function Page() {
                     <Button showIcon variant="outline">Explore Events</Button>
                 </div>
                 <div className="flex-1 flex justify-end">
-                    <div className="grid grid-cols-4 gap-4 max-w-[620px]">
+                    <div className="grid grid-cols-4 place-items-start gap-4 max-w-[620px]">
                         {
                             toolsCard.map((tool, index) => (
-                                <div key={index} className="flex flex-col items-center justify-center">
-                                    <div className="flex border-[0.56px] w-[134.03px] h-[134.03px] border-[#797979] rounded-[8.94px] flex-col items-center justify-center">
-                                        <Image src={tool.icon} alt={tool.text} width={56.67} height={50.26}/>
+                                <div key={index} className="flex flex-col group items-center justify-center">
+                                    <div className="flex border-[0.56px] w-[69.16px] h-[69.16px] lg:w-[134.03px] lg:h-[134.03px] border-[#797979] group-hover:bg-yellow rounded-[8.94px] flex-col items-center justify-center">
+                                        <Image src={tool.icon} alt={tool.text} className="w-[29.24px] h-[25.93px] lg:w-auto lg:h-auto" width={56.67} height={50.26}/>
                                     </div>
                                     <Typography className="font-bold mt-2 tracking-tight text-xs text-center text-[#1E1E1E]" variant="p">{tool.text}</Typography>
                                 </div>
@@ -166,7 +168,7 @@ export default function Page() {
             </div>
         </section>
         <FAQ />
-        <section className="bg-white py-24 mb-10">
+        <section className="bg-white py-12 lg:py-24 mb-10">
             <div className="container mx-auto px-4 flex flex-col items-center text-center gap-6">
                 <div className="max-w-3xl space-y-4 mb-5">
                     <Typography variant="h2">
@@ -186,18 +188,21 @@ export default function Page() {
             <div className="container mx-auto px-4 lg:px-8 xl:px-12">
                 <div className="flex justify-between items-center mb-10">
                     <Typography variant="h3" className="tracking-tighter">Trending News</Typography>
-                    <Button variant="link">See All News</Button>
+                    <Button variant="link">See All <span className="hidden lg:inherit">News</span></Button>
                 </div>
             </div>
             <div className="w-full">
-                <div className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    <div className="shrink-0 w-4 lg:w-8 xl:w-12" />
-                        {newsItems.map((news, index) => (
-                            <div key={news.id} className={`snap-start shrink-0 ${index === 0 ? 'sm:scroll-ml-10 ml-10' : ''} ${index === newsItems.length - 1 ? 'sm:scroll-mr-10 mr-10' : ''}`}>
-                                <NewsCard news={news} />
-                            </div>
-                        ))}
-                    <div className="shrink-0 w-4 lg:w-8 xl:w-12" />
+                <div className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-4 md:gap-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    {/* Dynamic Spacer: Adjusted to subtract the gap (1.5rem / 24px) to maintain pixel-perfect alignment */}
+                    <div className="snap-start shrink-0 w-0 md:w-[calc((100vw-768px)/2+1rem-1.5rem)] lg:w-[calc((100vw-1024px)/2+2rem-1.5rem)] xl:w-[calc((100vw-1280px)/2+3rem-1.5rem)] 2xl:w-[calc((100vw-1536px)/2+3rem-1.5rem)]" />
+                    
+                    {newsItems.map((news) => (
+                        <div key={news.id} className="snap-start shrink-0 w-[300px] md:w-[380px]">
+                            <NewsCard news={news} />
+                        </div>
+                    ))}
+                    
+                    <div className="shrink-0 w-0 md:w-[calc((100vw-768px)/2+1rem-1.5rem)] lg:w-[calc((100vw-1024px)/2+2rem-1.5rem)] xl:w-[calc((100vw-1280px)/2+3rem-1.5rem)] 2xl:w-[calc((100vw-1536px)/2+3rem-1.5rem)]" />
                 </div>
             </div>
         </section>

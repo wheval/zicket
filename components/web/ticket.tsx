@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 export default function TicketCard ({ticket} : {ticket: Ticket}) {
-    return <Card className="rounded-[10.96px] border-[1.57px] group p-[3.13px] gap-0 xl:max-w-[280px] sm:min-w-[280px] max-h-[375.32px]">
+    return <Card className="rounded-[10.96px] border-[1.57px] group p-[3.13px] gap-0 w-full h-full">
         <div className="relative overflow-hidden border-[#E9E9E9] border-[0.78px] rounded-[8.7px] w-full h-[194px]">
             <div className="absolute top-[10px] text-xs left-[10px] z-10 bg-blur-[12.51] bg-[#FFFFFF99] px-[9.38px] border-[#E9E9E9] border-[0.39px] rounded-[6.26px] py-[4.69px] flex items-center gap-1.5">
                {ticket.anonymous && (
@@ -59,7 +59,7 @@ export default function TicketCard ({ticket} : {ticket: Ticket}) {
                         ticket.attendees?.slice(0, 3).map((att, index) => {
                             return (
                                     <Avatar className="w-[24px] h-[24px]" key={`${att.walletAddress || att.avatar_url}-${index}`}>
-                                        <AvatarImage src={att.avatar_url} />
+                                        <AvatarImage alt="" src={att.avatar_url} />
                                         <AvatarFallback>{att.name[0].toUpperCase()}</AvatarFallback>
                                     </Avatar>
                             );

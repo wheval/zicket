@@ -41,23 +41,23 @@ export function FAQ() {
           <Typography variant="h2" className="mb-4">
             FAQs
           </Typography>
-          <Typography variant="p" className="text-foreground tracking-tighter w-[45ch] mx-auto font-medium">
+          <Typography variant="p" className="text-foreground tracking-tighter sm:w-[60%] lg:w-[45ch] mx-auto font-medium">
             Everything you need to know about using Zicket—how it works, what makes it private, and how you can join or host your next event.
           </Typography>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-2 md:space-y-4">
           {faqData.map((item, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={index}
-                className="border border-[#000000] bg-white px-6 rounded-[16px] overflow-hidden"
+                className="border border-[#000000] bg-white px-3 md:px-6 rounded-[16px] overflow-hidden"
               >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full flex items-center justify-between py-5 cursor-pointer text-left"
+                  className="w-full flex items-center justify-between py-3 md:py-5 cursor-pointer text-left"
                 >
-                  <Typography variant="h4" className="text-[20px] text-[#121212] font-bold">
+                  <Typography variant="h4" className="text-[14px] leading-tight md:text-[20px] text-[#121212] font-bold">
                     {item.question}
                   </Typography>
                   <div className="w-8 h-8 rounded-full flex items-center justify-center bg-primary shrink-0">
@@ -76,7 +76,7 @@ export function FAQ() {
                 >
                   <div className="overflow-hidden">
                     <div className="pt-3 border-t border-[#E5E5E5]">
-                      <Typography variant="p" className="text-[#121212]">
+                      <Typography variant="p" className="text-[14px] leading-tight md:leading-0 md:text-base text-[#121212]">
                         {item.answer}
                       </Typography>
                     </div>

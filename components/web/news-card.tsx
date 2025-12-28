@@ -8,8 +8,8 @@ interface NewsCardProps {
 
 export function NewsCard({ news }: NewsCardProps) {
   return (
-    <div className="flex flex-col gap-4 group font-inter w-fit p-0 m-0 cursor-pointer bg-white rounded-[24px] border border-transparent hover:border-[#E5E5E5] transition-all">
-      <div className="relative md:w-[380px] w-full  md:h-[200px]  overflow-hidden rounded-[12px]">
+    <div className="flex flex-col gap-4 group font-inter w-full h-full p-0 m-0 cursor-pointer bg-white rounded-[24px] border border-transparent hover:border-[#E5E5E5] transition-all">
+      <div className="relative w-full h-[200px] overflow-hidden rounded-[12px]">
         <Image
           src={news.image}
           alt={news.title}
