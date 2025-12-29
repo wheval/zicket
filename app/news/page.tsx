@@ -7,6 +7,8 @@ import { newsItems } from "@/lib/mock_data";
 import { NewsCard } from "@/components/web/news-card";
 import { Typography } from "@/components/web/typography";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Pagination from "@/components/web/pagination";
 
 export default function NewsPage() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -21,67 +23,64 @@ export default function NewsPage() {
     "Tech & ZK"
   ];
 
-  // For demonstration, let's pick the first item as featured
   const featuredNews = newsItems[0];
   const otherNews = newsItems.slice(1);
 
   return (
-    <main className="min-h-screen bg-[#F6F0FB] pt-32 pb-20">
+    <main className="min-h-screen bg-[#FCFDFD] pt-30 lg:pt-40 2xl:pt-48 pb-20">
       {/* Hero Section */}
       <div className="container mx-auto px-4 lg:px-8 xl:px-12 text-center mb-16">
-        <Typography variant="h1" className="mb-4 text-[#172233]">Newsroom</Typography>
-        <Typography variant="p" className="text-[#707070] text-lg max-w-2xl mx-auto mb-10">
+        <Typography variant="h1" className="mb-4 text-[#000000]">Newsroom</Typography>
+        <Typography variant="p" className="text-black tracking-tight text-[20px] max-w-2xl mx-auto mb-10">
           The latest news and views from Zicket
         </Typography>
 
         {/* Newsletter Subscription */}
-        <div className="max-w-md mx-auto mb-20 space-y-4">
-          <div className="flex items-center p-1.5 pl-6 rounded-full bg-white border border-[#E4E4E4] shadow-sm">
-            <div className="text-[#707070] mr-3">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12C22 15.7712 22 17.6569 20.8284 18.8284C19.6569 20 17.7712 20 14 20H10C6.22876 20 4.34315 20 3.17157 18.8284C2 17.6569 2 15.7712 2 12Z" stroke="currentColor" strokeWidth="1.5"/>
-                <path d="M6 8L10.2189 11.1642C11.2651 11.9488 12.7349 11.9488 13.7811 11.1642L18 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <div className="max-w-md lg:max-w-[600px] flex flex-col items-center justify-center mx-auto mb-20 space-y-4">
+          <div className="w-full relative">
+              <svg width="22" height="22" className="absolute left-6 top-1/2 -translate-y-1/2" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.77002 5.31055L7.88888 8.77754C10.1447 10.0557 11.0978 10.0557 13.3536 8.77754L19.4725 5.31055" stroke="#2C0A4A" strokeWidth="1.32768" strokeLinejoin="round"/>
+              <path d="M1.78398 11.9278C1.84184 14.6412 1.87077 15.9978 2.87196 17.0029C3.87314 18.0078 5.26654 18.0428 8.05335 18.1128C9.7709 18.156 11.4716 18.156 13.1892 18.1128C15.976 18.0428 17.3693 18.0078 18.3706 17.0029C19.3717 15.9978 19.4007 14.6412 19.4585 11.9278C19.4771 11.0553 19.4771 10.1881 19.4585 9.31559C19.4007 6.60222 19.3717 5.24553 18.3706 4.24054C17.3693 3.23554 15.976 3.20054 13.1892 3.13051C11.4716 3.08736 9.7709 3.08736 8.05334 3.13051C5.26654 3.20052 3.87314 3.23553 2.87195 4.24053C1.87076 5.24552 1.84184 6.60221 1.78397 9.31559C1.76536 10.1881 1.76537 11.0553 1.78398 11.9278Z" stroke="#2C0A4A" strokeWidth="1.32768" strokeLinejoin="round"/>
               </svg>
-            </div>
-            <input
+            <Input
               type="email"
               placeholder="Enter Email Address"
-              className="bg-transparent border-none outline-none grow text-sm text-[#172233] placeholder:text-[#A8A8A8]"
+              className="bg-transparent h-[57px] xl:w-[600px] rounded-full border-[#B2B2B2] border w-full outline-none grow text-sm lg:text-base pl-16 text-[#172233] placeholder:text-[#B2B2B2]"
             />
           </div>
-          <Button className="w-full sm:w-auto px-12 h-12 rounded-full">
+          <Button className="text-base">
             Subscribe!
           </Button>
         </div>
 
         {/* Featured Article */}
         <Link href={`/news/${featuredNews.id}`}>
-          <div className="bg-white rounded-[32px] overflow-hidden border border-[#E4E4E4] flex flex-col lg:flex-row items-stretch text-left group cursor-pointer transition-all hover:shadow-xl">
-            <div className="lg:w-1/2 relative min-h-[300px] overflow-hidden">
+          <div className="bg-transparent py-6 lg:py-12 font-inter overflow-hidden flex flex-col gap-y-4 lg:flex-row items-start text-left group cursor-pointer transition-all">
+            <div className="lg:w-1/2 w-full relative min-h-[252.42px] lg:min-h-[300px] rounded-[10px] xl:h-[483px] overflow-hidden">
               <Image 
-                src="/images/news/news_1.jpg" // Placeholder for large image
+                src="/images/news/news_1.jpg"
                 alt={featuredNews.title}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
-              <span className="text-[#6917AF] font-bold text-xs uppercase tracking-widest mb-4">Announcements</span>
-              <Typography variant="h2" className="text-2xl lg:text-4xl font-bold mb-6 group-hover:text-[#6917AF] transition-colors leading-tight">
+            <div className="lg:w-1/2 lg:px-24 flex gap-y-4 lg:gap-y-6 flex-col justify-center">
+              <span className="text-[#6917AF] font-bold text-xs lg:text-[18px] mt-1 uppercase md:mb-4">Announcements</span>
+              <Typography variant="h2" className="text-[18px] text-[#303030] lg:text-[28px] font-bold  transition-colors font-inter leading-tight">
                 How early adopters used Zicket to host 12 exclusive events in 3 cities.
               </Typography>
               
-              <div className="flex items-center gap-4 mb-6">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden border border-[#E4E4E4]">
+              <div className="flex lg:items-center items-start lg:gap-4 gap-2">
+                <div className="relative min-w-[60px] w-[60px] h-[60px] min-h-[60px] lg:min-w-[70px] lg:min-h-[70px]  lg:w-[70px] lg:h-[70px] rounded-full overflow-hidden border border-[#D9D9D9]">
                   <Image src={featuredNews.author.avatar} alt={featuredNews.author.name} fill className="object-cover" />
                 </div>
                 <div>
-                  <Typography variant="p" className="font-bold text-[#172233] leading-none mb-1">John Doe</Typography>
-                  <Typography variant="p" className="text-xs text-[#707070]">Checkout Experiences Product Team</Typography>
+                  <Typography variant="p" className="font-bold text-black leading-none lg:mb-1">John Doe</Typography>
+                  <Typography variant="p" className="text-black text-sm font-satoshi lg:font-inter lg:text-base font-light">Checkout Experiences Product Team</Typography>
                 </div>
               </div>
               
-              <Typography variant="p" className="text-[#707070] text-sm">
+              <Typography variant="p" className="text-black font-light text-[12px] font-satoshi lg:text-inter lg:text-base">
                 December 7, 2022
               </Typography>
             </div>
@@ -96,10 +95,10 @@ export default function NewsPage() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all border ${
+              className={`px-4 py-2 cursor-pointer rounded-full text-sm font-semibold transition-all border ${
                 activeCategory === cat 
                   ? "bg-[#6917AF] border-[#6917AF] text-white shadow-lg" 
-                  : "bg-white border-[#E4E4E4] text-[#172233] hover:bg-gray-50"
+                  : "bg-transparent border-[#6917AF] text-[#6917AF] hover:bg-gray-50"
               }`}
             >
               {cat}
@@ -116,23 +115,7 @@ export default function NewsPage() {
           ))}
         </div>
 
-        {/* Pagination */}
-        <div className="flex justify-center items-center gap-2 pt-10 border-t border-[#E4E4E4]">
-          <button className="px-4 py-2 text-sm font-semibold text-[#707070] hover:text-[#6917AF] transition-colors">
-            Next
-          </button>
-          {[1, 2, 3].map((num) => (
-            <button 
-              key={num}
-              className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${
-                num === 1 ? "bg-[#6917AF] text-white shadow-md" : "bg-[#F1EEF9] text-[#172233] hover:bg-[#E5E0F3]"
-              }`}
-            >
-              {num}
-            </button>
-          ))}
-          <button className="px-4 py-2 text-sm font-semibold text-[#707070] hover:text-[#6917AF] transition-colors">Last</button>
-        </div>
+       <Pagination />
       </div>
     </main>
   );

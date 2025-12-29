@@ -57,7 +57,7 @@ const buttonVariants = cva(
         ticket: "border font-semibold gap-x-0! border-[#E3E3E3] py-1! px-2! rounded-[4px] bg-transparent h-[24.7px]"
       },
       size: {
-        default: "h-8 gap-1.5 px-7 py-5.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+        default: "h-8 gap-1.5 px-6 py-5.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
         xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
         lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
@@ -135,7 +135,7 @@ function Button({
   if (variant === "default") {
     return (
       <div className={cn(
-        "inline-block border border-b-2 border-[#4B107C] rounded-full p-0!",
+        "inline-block max-w-fit border border-b-2 border-[#4B107C] rounded-full p-0!",
         hasShadow && "shadow-[0_12px_16px_0_rgba(117,26,198,0.24)]",
         className 
       )}>

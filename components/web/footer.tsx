@@ -10,13 +10,15 @@ export function Footer() {
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-0">          {/* Left Section: Logo and Description */}
           <div className="sm:max-w-xs w-full flex flex-col items-center sm:items-start">
             <div className="flex items-center gap-2  mb-3 md:mb-6">
-              <Image 
-                src="/logo-light.png" 
-                alt="Zicket logo" 
-                width={106.48} 
-                height={24}
-                className="" 
-              />
+              <Link href="/">
+                <Image 
+                  src="/logo-light.png" 
+                  alt="Zicket logo" 
+                  width={106.48} 
+                  height={24}
+                  className="" 
+                />
+                </Link>
             </div>
             <Typography variant="p" className="text-[#A8A8A8] text-center sm:text-start text-sm leading">
             Public or Private Events.<br />
