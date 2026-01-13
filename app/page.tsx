@@ -20,6 +20,7 @@ import { Navbar } from "@/components/web/navbar";
 import { FAQ } from "@/components/web/faq";
 import { NewsCard } from "@/components/web/news-card";
 import { newsItems } from "@/lib/mock_data";
+import Link from "next/link";
 
 export default function Page() {
     const [hoveredTool, setHoveredTool] = useState<number | null>(null);
@@ -89,9 +90,11 @@ export default function Page() {
                     </Typography>
                 </div>
 
-                <Button showIcon hasShadow className="md:text-lg">
-                    Explore Events Anonymously
-                </Button>
+                <Link href="/explore">
+                    <Button showIcon hasShadow className="md:text-lg">
+                        Explore Events Anonymously
+                    </Button>
+                </Link>
 
                 <div className="absolute bottom-12 left-0 right-0 flex flex-col items-center gap-4">
                     <div className="flex flex-col md:flex-row items-center gap-6 lg:gap-8 px-4 py-2 rounded-lg">
@@ -156,7 +159,7 @@ export default function Page() {
                     <Typography className="font-medium tracking-tight" variant="p">
                         Privacy-first event hosting and ticketing. Built on Aztec Network, Zicket keeps you in control of your identity.
                     </Typography>
-                    <Button showIcon variant="outline">Explore Events</Button>
+                    <Link href="/explore"><Button showIcon variant="outline">Explore Events</Button></Link>
                 </div>
                 <div className="flex-1 flex justify-end">
                     <div className="grid grid-cols-4 place-items-start gap-4 max-w-[620px]">

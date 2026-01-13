@@ -5,7 +5,7 @@ import { Select as SelectPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { UnfoldMoreIcon, Tick02Icon, ArrowUp01Icon, ArrowDown01Icon } from "@hugeicons/core-free-icons"
+import { UnfoldMoreIcon, CheckmarkSquareIcon, Tick02Icon, ArrowUp01Icon, ArrowDown01Icon } from "@hugeicons/core-free-icons"
 
 function Select({
   ...props
@@ -52,7 +52,7 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <HugeiconsIcon icon={UnfoldMoreIcon} strokeWidth={2} className="text-muted-foreground size-4 pointer-events-none" />
+        <HugeiconsIcon icon={props.property == "special" ? CheckmarkSquareIcon: UnfoldMoreIcon} strokeWidth={2} fill={props.property == "special"? "#6917AF" :""} className="text-white size-6 pointer-events-none"/>
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )

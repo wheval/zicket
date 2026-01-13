@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { type Ticket } from "@/lib/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -113,7 +114,9 @@ export default function TicketCard ({ticket} : {ticket: Ticket}) {
                     </svg>
                     <p className="font-semibold text-sm text-[#1E1E1E]">${ticket.price_in_usd.toFixed(2)}</p>
                 </div>
-               <Button variant="ticket" showIcon>Get Ticket</Button>
+               <Button asChild variant="ticket" showIcon>
+                 <Link href={`/ticket/${ticket.id}`}>Get Ticket</Link>
+               </Button>
             </div>
         </div>
     </Card>
