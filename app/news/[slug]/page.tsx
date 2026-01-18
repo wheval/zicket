@@ -34,18 +34,18 @@ export default async function NewsDetailPage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-[#FCFDFD] pt-30 lg:pt-40 2xl:pt-48 pb-20">
-      <div className="container mx-auto font-inter px-4 lg:px-8 xl:px-12">
+      <div className="container mx-auto font-inter px-4 sm:px-6 lg:px-8 xl:px-12">
         {/* Breadcrumbs */}
         <div className="flex justify-center items-center gap-2 text-sm text-[#2C0A4A] font-medium font-inter mb-12">
           <Link href="/news" className="hover:text-[#6917AF] transition-colors">News</Link>
           <p className="text-[#98A2B3] font-bold">/</p>
-          <span className="font-medium">{news.category}</span>
+          <span className="font-medium truncate">{news.category}</span>
           <p className="text-[#98A2B3] font-bold">/</p>
           <span className="truncate max-w-[300px] text-[#667185]">{news.title}</span>
         </div>
 
         {/* Header */}
-        <div className="max-w-4xl mx-auto text-center mb-30">
+        <div className="max-w-4xl mx-auto text-center mb-10 md:mb-30">
           <span className="text-[#6917AF] font-semibold text-base uppercase mb-6 block">
             {news.category}
           </span>
@@ -67,7 +67,7 @@ export default async function NewsDetailPage({ params }: Props) {
         </div>
 
         {/* Hero Image */}
-        <div className="relative w-full aspect-21/9 rounded-[16px] overflow-hidden mb-20">
+        <div className="relative w-full min-h-[200px] md:aspect-21/9 rounded-[16px] overflow-hidden mb-10 md:mb-20">
           <Image 
             src={news.image}
             alt={news.title}

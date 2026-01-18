@@ -29,7 +29,7 @@ export function Navbar() {
                   </svg>
                 </Link>
                 <Link href="/news" >News</Link>
-                <Link href="/" >Plans</Link>
+                {/* <Link href="/" >Plans</Link> */}
               </nav>
               <div className="relative hidden lg:flex items-center ml-4">
                 <input
@@ -48,7 +48,7 @@ export function Navbar() {
               </div>
             </div>
 
-            <div className="hidden lg:flex items-center gap-5">
+            <div className="hidden md:flex items-center gap-5">
               <SwitchToggle
                 checked={isAnonymous}
                 onChange={setIsAnonymous}
@@ -145,7 +145,7 @@ export function Navbar() {
                 <path d="m9 18 6-6-6-6"/>
               </svg>
             </Link>
-            <Link 
+            {/* <Link 
               href="/" 
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center justify-between py-2 rounded-xl text-[#172233] font-semibold hover:bg-[#F6F0FB] transition-colors"
@@ -154,7 +154,7 @@ export function Navbar() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="m9 18 6-6-6-6"/>
               </svg>
-            </Link>
+            </Link> */}
           </nav>
 
           {/* Anonymous Toggle */}

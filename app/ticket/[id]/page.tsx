@@ -88,7 +88,7 @@ export default async function TicketDetailPage({ params }: Props) {
 
     return (
         <main className="min-h-screen bg-[#FCFDFD] pt-30 lg:pt-40 2xl:pt-48 pb-20">
-            <div className="container mx-auto font-inter px-4 lg:px-8 xl:px-12">
+            <div className="container mx-auto font-inter px-4 sm:px-6 lg:px-8 xl:px-12">
                 {/* Breadcrumbs */}
                 <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-[#2C0A4A] font-medium mb-8">
                     <Link href="/explore" className="hover:text-[#6917AF] transition-colors">
