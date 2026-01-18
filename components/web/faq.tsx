@@ -35,7 +35,7 @@ export function FAQ() {
   };
 
   return (
-    <section className=" py-20 lg:py-30">
+    <section id="faqs" className=" py-20 lg:py-30">
       <div className="container mx-auto px-4 lg:px-8 xl:px-12 max-w-4xl">
         <div className="text-center mb-12">
           <Typography variant="h2" className="mb-4">

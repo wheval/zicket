@@ -114,9 +114,11 @@ export default function TicketCard ({ticket} : {ticket: Ticket}) {
                     </svg>
                     <p className="font-semibold text-sm text-[#1E1E1E]">${ticket.price_in_usd.toFixed(2)}</p>
                 </div>
-               <Button asChild variant="ticket" showIcon>
-                 <Link href={`/ticket/${ticket.id}`}>Get Ticket</Link>
-               </Button>
+               <Link href={`/ticket/${ticket.id}`}>
+                <Button variant="ticket" showIcon>
+                    Get Ticket
+                </Button>
+               </Link>
             </div>
         </div>
     </Card>

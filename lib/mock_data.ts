@@ -1,4 +1,4 @@
-import { Ticket } from "./types";
+import { Ticket, NewsItem } from "./types";
 
 export const tickets: Ticket[] = [
     {
@@ -389,18 +389,6 @@ export const tickets: Ticket[] = [
         event_verified: false
     },
 ]
-export interface NewsItem {
-    id: string;
-    image: string;
-    category: string;
-    date: string;
-    title: string;
-    description: string;
-    author: {
-        name: string;
-        avatar: string;
-    };
-}
 
 export const newsItems: NewsItem[] = [
     {
@@ -410,6 +398,13 @@ export const newsItems: NewsItem[] = [
         date: "03 June, 2025",
         title: "Zicket x Builders: A Hack Night Recap",
         description: "How the dev crowd used Zicket for a private demo series.",
+        content: `Last month, we partnered with three developer collectives across Lagos, Berlin, and Singapore to run a series of private demo nights. The goal was simple: let builders experiment with privacy-first event ticketing in real-world conditions.
+
+What emerged was fascinating. Teams used Zicket's anonymous attendance feature to create "blind feedback" sessions where presenters couldn't identify their critics. This led to more honest, constructive feedback than traditional demo days.
+
+One team even built a reputation system on top of our ZK-proofs — attendees could prove they'd been to previous events without revealing which ones. The implications for professional networking are huge: imagine proving your expertise through attendance history without doxxing your interests.
+
+We're now working with these communities to formalize the "Hack Night" format. If you're running a builder community and want to try privacy-first demos, reach out.`,
         author: {
             name: "ZKC Node",
             avatar: "/images/avatars/avatar_1.png",
@@ -419,9 +414,18 @@ export const newsItems: NewsItem[] = [
         id: "2",
         image: "/images/news/news_2.jpg",
         category: "Ecosystem",
-        date: "03 June, 2025",
+        date: "10 June, 2025",
         title: "CircleDrop Format Explained",
         description: "Smaller, faster events for high-trust groups.",
+        content: `CircleDrop is our new event format designed for intimate gatherings where trust is paramount. Unlike traditional ticketing where anyone with a link can register, CircleDrop events use invitation trees.
+
+Here's how it works: An organizer creates an event and receives 5 invite tokens. Each attendee who claims a token gets 2 more to distribute. This creates organic, trust-based growth where everyone has skin in the game.
+
+The privacy layer means organizers see attendance numbers but not individual identities unless attendees choose to reveal themselves. Perfect for sensitive discussions, recovery groups, or exclusive networking.
+
+Early adopters are using CircleDrop for DAO governance discussions where participation matters more than identity, and for professional masterminds where members want to protect their competitive advantages.
+
+We're seeing 94% show-up rates compared to 60% for traditional free events. When you personally invited someone, you're more likely to show up yourself.`,
         author: {
             name: "Indie Venue Club",
             avatar: "/images/avatars/avatar_2.png",
@@ -431,9 +435,20 @@ export const newsItems: NewsItem[] = [
         id: "3",
         image: "/images/news/news_3.jpg",
         category: "Behind the Scenes",
-        date: "03 June, 2025",
+        date: "15 June, 2025",
         title: "Designing for Private Discovery",
         description: "Why our interface hides what doesn't matter.",
+        content: `Most event platforms are designed around extraction — capturing as much user data as possible to optimize for engagement metrics. We took the opposite approach.
+
+When we started designing Zicket's discovery interface, we asked: what's the minimum information someone needs to decide if an event is right for them? The answer was surprisingly small: topic, time, location, and vibe.
+
+You'll notice we don't show attendee lists by default. We don't display "X people are interested" counters. We don't have social proof badges. These features exist to pressure users into decisions, not to help them make better ones.
+
+Instead, we focused on rich event descriptions, clear privacy policies per event, and honest capacity indicators. Organizers can opt into transparency features if they want them, but the default is privacy-preserving.
+
+The result? Higher-quality attendance. People come because they genuinely want to be there, not because their friends are going or because FOMO kicked in. Organizers report more engaged audiences and better post-event connections.
+
+Privacy isn't just about hiding — it's about creating space for authentic participation.`,
         author: {
             name: "Studio Delta",
             avatar: "/images/avatars/avatar_3.png",
@@ -442,22 +457,21 @@ export const newsItems: NewsItem[] = [
     {
         id: "4",
         image: "/images/news/news_1.jpg",
-        category: "Tech",
-        date: "03 June, 2025",
-        title: "Zicket x Builders: A Hack Night Recap",
-        description: "How the dev crowd used Zicket for a private demo series.",
-        author: {
-            name: "ZKC Node",
-            avatar: "/images/avatars/avatar_1.png",
-        },
-    },
-    {
-        id: "4",
-        image: "/images/news/news_1.jpg",
-        category: "Tech",
-        date: "03 June, 2025",
-        title: "Zicket x Builders: A Hack Night Recap",
-        description: "How the dev crowd used Zicket for a private demo series.",
+        category: "Product Updates",
+        date: "20 June, 2025",
+        title: "Anonymous Payments Now Live",
+        description: "Pay for events without linking your wallet to your attendance.",
+        content: `Today we're launching Anonymous Payments, powered by Aztec's shielded transactions. This is a game-changer for privacy-conscious attendees.
+
+Previously, even with anonymous attendance, payment created a link between your wallet and the event. Anyone analyzing on-chain data could infer your interests, network, and activities. Not anymore.
+
+With Anonymous Payments, your funds route through a privacy pool before reaching the organizer. The organizer receives payment confirmation without any wallet address. You get a ZK-proof ticket that proves payment without revealing payer identity.
+
+Technical details for the curious: we're using Aztec's noir circuits for the proof generation, with a 30-second proving time on modern hardware. Mobile proving is coming Q4 2025.
+
+This feature is opt-in and available for events where organizers enable it. Gas costs are slightly higher due to the privacy overhead, but we're subsidizing the difference during the beta period.
+
+For high-risk attendees — activists, journalists, whistleblowers — this removes a critical vulnerability. For everyone else, it's just good privacy hygiene.`,
         author: {
             name: "ZKC Node",
             avatar: "/images/avatars/avatar_1.png",
@@ -466,10 +480,23 @@ export const newsItems: NewsItem[] = [
     {
         id: "5",
         image: "/images/news/news_2.jpg",
-        category: "Tech & Crypto",
-        date: "03 June, 2025",
-        title: "Zicket x Builders: A Hack Night Recap",
-        description: "How the dev crowd used Zicket for a private demo series.",
+        category: "Community",
+        date: "25 June, 2025",
+        title: "Zicket Community Grants Program",
+        description: "Funding privacy-first event experiments worldwide.",
+        content: `We're committing $100,000 to fund experimental event formats that push the boundaries of privacy-first gathering.
+
+The Zicket Community Grants Program will fund 20 projects over the next year. We're looking for organizers who want to try something new: events that couldn't exist without privacy guarantees, formats that challenge conventional ticketing assumptions, communities that need protection.
+
+Grant sizes range from $1,000 for small experiments to $15,000 for ambitious multi-event series. We're especially interested in proposals from underrepresented regions and marginalized communities.
+
+What we're NOT looking for: traditional events that just want free marketing. If your event would work fine on Eventbrite, it's probably not a fit.
+
+What excites us: anonymous professional networks, privacy-preserving cultural gatherings, experimental governance formats, cross-border community building, and anything that makes us say "wait, you can do that?"
+
+Applications open July 1st. We'll announce the first cohort by August 15th. All grantees get technical support from our team and access to beta features.
+
+Privacy is a collective project. Let's build it together.`,
         author: {
             name: "ZKC Node",
             avatar: "/images/avatars/avatar_1.png",

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Typography } from "./typography";
-import { NewsItem } from "@/lib/mock_data";
+import type { NewsItem } from "@/lib/types";
 
 interface NewsCardProps {
   news: NewsItem;

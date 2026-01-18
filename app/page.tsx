@@ -1,8 +1,5 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
-import { tickets } from "@/lib/mock_data";
+import Link from "next/link";
 import { 
     CareerIcon, 
     ArtIcon, 
@@ -16,14 +13,14 @@ import {
 import { Typography } from "@/components/web/typography";
 import { Button } from "@/components/ui/button";
 import TicketCard from "@/components/web/ticket";
-import { Navbar } from "@/components/web/navbar";
 import { FAQ } from "@/components/web/faq";
 import { NewsCard } from "@/components/web/news-card";
-import { newsItems } from "@/lib/mock_data";
-import Link from "next/link";
+import { getTickets, getNewsItems } from "@/lib/db/queries";
 
-export default function Page() {
-    const [hoveredTool, setHoveredTool] = useState<number | null>(null);
+export default async function Page() {
+    const trendingTickets = await getTickets({ limit: 12, orderByPopularity: true });
+    const trendingNews = await getNewsItems({ limit: 10 });
+
     const howItWorksCard = [
         {
             icon: "/images/discover.png",
@@ -41,44 +38,20 @@ export default function Page() {
             desc: "Wallets are used only for payment. No guest wallet required for free events."
         },
     ];
+
     const toolsCard = [
-        {
-            icon: CryptoIcon,
-            text: "Web3 & Crypto Meetups"
-        },
-        {
-            icon: CareerIcon,
-            text: "Career & Innovation"
-        },
-        {
-            icon: ArtIcon,
-            text: "Art & Digital Culture"
-        },
-        {
-            icon: MusicIcon,
-            text: "Music & Nightlife"
-        },
-        {
-            icon: WellnessIcon,
-            text: "Wellness & Retreats"
-        },
-        {
-            icon: PanelIcon,
-            text: "Talks & Panels"
-        },
-        {
-            icon: WorkshopIcon,
-            text: "Workshops & Builder Labs"
-        },
-        {
-            icon: VibeIcon,
-            text: "Social & Underground Vibes"
-        },
-    ]
+        { icon: CryptoIcon, text: "Web3 & Crypto Meetups" },
+        { icon: CareerIcon, text: "Career & Innovation" },
+        { icon: ArtIcon, text: "Art & Digital Culture" },
+        { icon: MusicIcon, text: "Music & Nightlife" },
+        { icon: WellnessIcon, text: "Wellness & Retreats" },
+        { icon: PanelIcon, text: "Talks & Panels" },
+        { icon: WorkshopIcon, text: "Workshops & Builder Labs" },
+        { icon: VibeIcon, text: "Social & Underground Vibes" },
+    ];
     
     return <main className="bg-[#F6F0FB]">
         <section className="relative overflow-hidden h-[86dvh] bg-[url('/images/bg.png')] bg-cover bg-center">
-            <Navbar />
             <div className="relative z-20 flex flex-col items-center justify-center h-full text-center max-w-4xl mx-auto px-4 gap-8">
                 <div className="space-y-4">
                     <Typography className="text-white drop-shadow-xl" variant="h1">
@@ -132,14 +105,13 @@ export default function Page() {
         <section className="bg-white rounded-[32px] py-16">
             <div className="px-4 container mx-auto lg:px-8 xl:px-12 mb-6 xl:mb-8 flex justify-between items-center">
                 <Typography variant="h3">Trending Now <span className="hidden ld:inherit">on Zicket</span></Typography>
-                <Button variant="link">Browse Events</Button>
+                <Link className="cursor-pointer" href="/explore"><Button variant="link">Browse Events</Button></Link>
             </div>
             <div className="max-w-full overflow-hidden">
                 <div className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-4 md:gap-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    {/* Dynamic Spacer: Adjusted to subtract the gap (1.5rem / 24px) to maintain pixel-perfect alignment */}
                     <div className="snap-start shrink-0 w-0 md:w-[calc((100vw-768px)/2+1rem-1.5rem)] lg:w-[calc((100vw-1024px)/2+2rem-1.5rem)] xl:w-[calc((100vw-1280px)/2+3rem-1.5rem)] 2xl:w-[calc((100vw-1536px)/2+3rem-1.5rem)]" />
                     
-                    {tickets.map((ticket) => (
+                    {trendingTickets.map((ticket) => (
                         <div 
                             key={ticket.id} 
                             className="snap-start shrink-0 w-[280px]"
@@ -163,26 +135,22 @@ export default function Page() {
                 </div>
                 <div className="flex-1 flex justify-end">
                     <div className="grid grid-cols-4 place-items-start gap-4 max-w-[620px]">
-                        {
-                            toolsCard.map((tool, index) => {
-                                const Icon = tool.icon;
-                                return (
-                                    <div 
-                                        key={index} 
-                                        className="flex flex-col group items-center justify-center"
-                                        onMouseEnter={() => setHoveredTool(index)}
-                                        onMouseLeave={() => setHoveredTool(null)}
-                                    >
-                                        <div className="flex border-[0.56px] w-[69.16px] h-[69.16px] lg:w-[134.03px] lg:h-[134.03px] border-[#797979] group-hover:bg-[#F5E6D3] rounded-[8.94px] flex-col items-center justify-center transition-colors duration-100">
-                                            <div className="transition-transform duration-100 group-hover:scale-125">
-                                                <Icon color={hoveredTool === index ? "#6917AF" : "#404040"} />
-                                            </div>
+                        {toolsCard.map((tool, index) => {
+                            const Icon = tool.icon;
+                            return (
+                                <div 
+                                    key={index} 
+                                    className="flex flex-col group items-center justify-center"
+                                >
+                                    <div className="flex border-[0.56px] w-[69.16px] h-[69.16px] lg:w-[134.03px] lg:h-[134.03px] border-[#797979] group-hover:bg-[#F5E6D3] rounded-[8.94px] flex-col items-center justify-center transition-colors duration-100 text-[#404040] group-hover:text-[#6917AF]">
+                                        <div className="transition-transform duration-100 group-hover:scale-125">
+                                            <Icon color="currentColor" />
                                         </div>
-                                        <Typography className="font-bold mt-2 tracking-tight text-xs text-center text-[#1E1E1E]" variant="p">{tool.text}</Typography>
                                     </div>
-                                );
-                            })
-                        }
+                                    <Typography className="font-bold mt-2 tracking-tight text-xs text-center text-[#1E1E1E]" variant="p">{tool.text}</Typography>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
@@ -208,17 +176,18 @@ export default function Page() {
             <div className="container mx-auto px-4 lg:px-8 xl:px-12">
                 <div className="flex justify-between items-center mb-10">
                     <Typography variant="h3" className="tracking-tighter">Trending News</Typography>
-                    <Button variant="link">See All <span className="hidden lg:inherit">News</span></Button>
+                    <Link className="cursor-pointer" href="/news"><Button variant="link">See All <span className="hidden lg:inherit">News</span></Button></Link>
                 </div>
             </div>
             <div className="w-full">
                 <div className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-4 md:gap-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    {/* Dynamic Spacer: Adjusted to subtract the gap (1.5rem / 24px) to maintain pixel-perfect alignment */}
                     <div className="snap-start shrink-0 w-0 md:w-[calc((100vw-768px)/2+1rem-1.5rem)] lg:w-[calc((100vw-1024px)/2+2rem-1.5rem)] xl:w-[calc((100vw-1280px)/2+3rem-1.5rem)] 2xl:w-[calc((100vw-1536px)/2+3rem-1.5rem)]" />
                     
-                    {newsItems.map((news) => (
+                    {trendingNews.map((news) => (
                         <div key={news.id} className="snap-start shrink-0 w-[300px] md:w-[380px]">
-                            <NewsCard news={news} />
+                            <Link href={`/news/${news.id}`} className="block h-full">
+                                <NewsCard news={news} />
+                            </Link>
                         </div>
                     ))}
                     

@@ -42,11 +42,6 @@ export function TicketPurchaseCard({
   const [selectedType, setSelectedType] = useState(types[0]?.id ?? "standard");
   const [email, setEmail] = useState("");
 
-  const selected = useMemo(
-    () => types.find((t) => t.id === selectedType) ?? types[0],
-    [selectedType, types]
-  );
-
   const privacyLabel = ticket.anonymous ? "Anonymous" : ticket.event_verified ? "Verified Access" : "Wallet";
 
   return (
@@ -68,7 +63,9 @@ export function TicketPurchaseCard({
                 <SelectItem key={t.id} value={t.id}>
                   <div className="flex w-full items-center justify-between gap-4">
                     <span className="font-semibold text-[#6917AF]">{t.label}</span>
-                    { t.label != t.priceLabel && <span className="text-[#667185] text-sm">{t.priceLabel}</span>}
+                    {t.label !== t.priceLabel && (
+                      <span className="text-[#667185] text-sm">{t.priceLabel}</span>
+                    )}
                   </div>
                 </SelectItem>
               ))}

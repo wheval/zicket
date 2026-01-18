@@ -1,5 +1,3 @@
-import { Timestamp } from "next/dist/server/lib/cache-handlers/types";
-
 export interface Ticket {
     id: string,
     event_id: string,
@@ -7,7 +5,7 @@ export interface Ticket {
     image: string,
     no_of_attendees: number,
     attendees: Attendee[],
-    event_date: Timestamp,
+    event_date: number,
     event_time_in_utc: string,
     event_location: string,
     anonymous?: boolean,
@@ -28,3 +26,17 @@ export interface Event {
 }
 
 export type WalletAddress = `0x${string}`;
+
+export interface NewsItem {
+  id: string;
+  image: string;
+  category: string;
+  date: string;
+  title: string;
+  description: string;
+  content: string;
+  author: {
+    name: string;
+    avatar: string;
+  };
+}

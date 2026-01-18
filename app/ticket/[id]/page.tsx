@@ -1,20 +1,63 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { eq, ne, desc } from "drizzle-orm";
 
 import { TicketPurchaseCard } from "@/components/web/ticket-purchase-card";
 import TicketCard from "@/components/web/ticket";
 import { Badge } from "@/components/ui/badge";
-import { tickets } from "@/lib/mock_data";
+import { getDb } from "@/src";
+import { tickets as ticketsTable } from "@/src/db/schema";
 import { formatDate } from "@/lib/utils";
+import type { Ticket } from "@/lib/types";
 
 type Props = {
     params: Promise<{ id: string }>;
 };
 
+function mapRowToTicket(row: typeof ticketsTable.$inferSelect): Ticket {
+    return {
+        id: row.id,
+        event_id: row.eventId,
+        title: row.title,
+        image: row.image,
+        no_of_attendees: row.noOfAttendees,
+        attendees: (row.attendees ?? []) as Ticket["attendees"],
+        event_date: row.eventDate,
+        event_time_in_utc: row.eventTimeInUtc,
+        event_location: row.eventLocation,
+        anonymous: row.anonymous,
+        paid: row.paid,
+        price_in_usd: Number(row.priceInUsd),
+        event_verified: row.eventVerified,
+    };
+}
+
+async function getTicketById(id: string): Promise<Ticket | null> {
+    const db = getDb();
+    const rows = await db
+        .select()
+        .from(ticketsTable)
+        .where(eq(ticketsTable.id, id))
+        .limit(1);
+    return rows[0] ? mapRowToTicket(rows[0]) : null;
+}
+
+async function getRelatedTickets(excludeId: string, limit = 4): Promise<Ticket[]> {
+    const db = getDb();
+    const rows = await db
+        .select()
+        .from(ticketsTable)
+        .where(ne(ticketsTable.id, excludeId))
+        .orderBy(desc(ticketsTable.noOfAttendees))
+        .limit(limit);
+    return rows.map(mapRowToTicket);
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { id } = await params;
-    const ticket = tickets.find((t) => t.id === id);
+    const ticket = await getTicketById(id);
 
     return {
         title: ticket?.title ? `${ticket.title}` : `Ticket #${id}`,
@@ -26,7 +69,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function TicketDetailPage({ params }: Props) {
     const { id } = await params;
-    const ticket = tickets.find((t) => t.id === id) ?? tickets[0];
+    const ticket = await getTicketById(id);
+
+    if (!ticket) {
+        notFound();
+    }
 
     const isFree = !ticket.paid || ticket.price_in_usd === 0;
     const priceLabel = isFree ? "FREE" : `$${ticket.price_in_usd.toFixed(2)}`;
@@ -37,7 +84,7 @@ export default async function TicketDetailPage({ params }: Props) {
         ticket.event_location?.toLowerCase().includes("virtual") ? "#Virtual" : "#Outdoor",
     ];
 
-    const related = tickets.filter((t) => t.id !== ticket.id).slice(0, 4);
+    const related = await getRelatedTickets(ticket.id, 4);
 
     return (
         <main className="min-h-screen bg-[#FCFDFD] pt-30 lg:pt-40 2xl:pt-48 pb-20">
@@ -99,7 +146,7 @@ export default async function TicketDetailPage({ params }: Props) {
                                     <path d="M2.96875 9.89546H20.7809" stroke="#5C6170" strokeWidth="1.48434" strokeLinecap="round" strokeLinejoin="round"/>
                                     <path d="M11.8703 13.8537H11.8792M11.8703 17.8119H11.8792M15.8241 13.8537H15.833M7.9165 13.8537H7.92538M7.9165 17.8119H7.92538" stroke="#5C6170" strokeWidth="1.97913" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
-                                    {formatDate(ticket.event_date as unknown as number)}
+                                {formatDate(ticket.event_date)}
                                 </span>
                                 <span className="flex flex-wrap items-center gap-2">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
