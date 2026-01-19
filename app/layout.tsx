@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     siteName: "Zicket",
     images: [
       {
-        url: "/og-image.jpg", // Assuming an image will exist or user will add one
+        url: "/og-image.png", // Assuming an image will exist or user will add one
         width: 1200,
         height: 630,
       },
@@ -98,7 +98,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Zicket",
     description: "Host Freely. Attend Silently.",
-    images: ["/og-image.jpg"],
+    images: ["/og-image.png"],
   },
 };
 
