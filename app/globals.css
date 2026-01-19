@@ -134,3 +134,8 @@
     font-family: var(--font-bricolage), sans-serif;
   }
 }
+
+/* Page wrapper inherits background from page content */
+#page-wrapper:has([data-page-bg="purple"]) {
+  background-color: #F6F0FB !important;
+}

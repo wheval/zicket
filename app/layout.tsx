@@ -109,10 +109,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${satoshi.variable} ${inter.variable} ${bricolage.variable} bg-[#F6F0FB] font-sans antialiased`}>
+      <body className={`${satoshi.variable} ${inter.variable} ${bricolage.variable} font-sans antialiased`}>
         <Navbar />
-        {children}
-        <Footer />
+        <div id="page-wrapper" className="bg-white">
+          {children}
+          <Footer />
+        </div>
       </body>
     </html>
   );

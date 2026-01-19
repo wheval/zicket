@@ -50,7 +50,7 @@ export default async function Page() {
         { icon: VibeIcon, text: "Social & Underground Vibes" },
     ];
     
-    return <main className="bg-[#F6F0FB]">
+    return <main className="bg-[#F6F0FB]" data-page-bg="purple">
         <section className="relative overflow-hidden h-[86dvh] bg-[url('/images/bg.png')] bg-cover bg-center">
             <div className="relative z-20 flex flex-col items-center justify-center h-full text-center max-w-4xl mx-auto px-4 gap-8">
                 <div className="space-y-4">
