@@ -25,6 +25,7 @@ jobs:
       - uses: software-mansion/setup-scarb@v1
         with:
           scarb-version: ${{ env.SCARB_VERSION }}
+          scarb-lock: contracts/Scarb.lock
 
       - uses: foundry-rs/setup-snfoundry@v6
         with:
@@ -105,16 +106,16 @@ jobs:
           done
 
       - name: Wait for the Neon HTTP proxy
+        # A bare POST to /sql is rejected without Neon's connection headers, so
+        # this waits on the port rather than on a response body.
         run: |
           for _ in $(seq 1 30); do
-            if curl -sf -o /dev/null "http://localhost:4444/sql" \
-              -X POST -H 'content-type: application/json' \
-              -d '{"query":"select 1","params":[]}'; then
+            if (exec 3<>/dev/tcp/localhost/4444) 2>/dev/null; then
               echo "proxy ready"; exit 0
             fi
             sleep 2
           done
-          echo "proxy did not come up"; exit 1
+          echo "proxy did not come up"; docker ps -a; exit 1
 
       - name: Build
         run: pnpm build
@@ -128,6 +129,7 @@ jobs:
       - uses: software-mansion/setup-scarb@v1
         with:
           scarb-version: ${{ env.SCARB_VERSION }}
+          scarb-lock: contracts/Scarb.lock
 
       - uses: pnpm/action-setup@v6
         with:
