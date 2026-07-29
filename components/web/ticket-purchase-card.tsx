@@ -12,6 +12,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Ticket } from "@/lib/types";
+import { useWallet } from "@/components/web/wallet-provider";
+import { explorerTxUrl } from "@/lib/starknet/config";
+import { useTicketPurchase } from "@/lib/starknet/use-ticket-purchase";
 import Image from "next/image";
 
 type TicketType = {
@@ -41,6 +44,30 @@ export function TicketPurchaseCard({
 
   const [selectedType, setSelectedType] = useState(types[0]?.id ?? "standard");
   const [email, setEmail] = useState("");
+  const [showConnectHint, setShowConnectHint] = useState(false);
+
+  const { status } = useWallet();
+  const { purchase, stage, error, result, isBusy } = useTicketPurchase(ticket);
+  const isConnected = status === "connected";
+
+  const txUrl = result ? explorerTxUrl(result.txHash) : null;
+
+  const buttonLabel = useMemo(() => {
+    switch (stage) {
+      case "preparing":
+        return "Preparing…";
+      case "awaiting-signature":
+        return "Confirm in wallet…";
+      case "confirming":
+        return "Confirming on-chain…";
+      case "recording":
+        return "Finalising…";
+      case "done":
+        return ticket.anonymous ? "Attending Anonymously" : "Ticket Secured";
+      default:
+        return ticket.anonymous ? "Attend Anonymously" : "Get Ticket";
+    }
+  }, [stage, ticket.anonymous]);
 
   const privacyLabel = ticket.anonymous ? "Anonymous" : ticket.event_verified ? "Verified Access" : "Wallet";
 
@@ -110,9 +137,57 @@ export function TicketPurchaseCard({
           Secure &amp; Instant Payment
         </div>
 
-        <Button variant={"secondary"} showIcon className="w-full h-12" >
-          {ticket.anonymous ? "Attend Anonymously" : "Get Ticket"}
+        <Button
+          variant={"secondary"}
+          showIcon
+          className="w-full h-12"
+          disabled={isBusy || stage === "done"}
+          onClick={() => {
+            if (!isConnected) {
+              setShowConnectHint(true);
+              return;
+            }
+            setShowConnectHint(false);
+            void purchase({ email: email || undefined });
+          }}
+        >
+          {buttonLabel}
         </Button>
+
+        {showConnectHint && !isConnected && (
+          <p className="text-[12px] font-medium text-[#667185]" role="status">
+            Connect a Starknet wallet from the header to continue.
+          </p>
+        )}
+
+        {stage === "error" && error && (
+          <p className="rounded-[12px] bg-[#FEF3F2] px-4 py-2 text-[12px] font-medium text-[#D42620]" role="alert">
+            {error}
+          </p>
+        )}
+
+        {stage === "done" && result && (
+          <div className="space-y-2 rounded-[12px] bg-[#F2FFF2] px-4 py-3 text-[12px] font-medium text-[#0ABA2A]">
+            <p>
+              {result.mode === "anonymous"
+                ? "You're in — anonymously. Your ticket secret is stored in this browser."
+                : "You're in. Your ticket is bound to your wallet."}
+            </p>
+            {result.mode === "anonymous" && (
+              <p className="text-[#667185]">
+                That secret is the only proof of your ticket, and Zicket never sees
+                it. Clearing site data will lose access to this event.
+              </p>
+            )}
+            {txUrl ? (
+              <a href={txUrl} target="_blank" rel="noreferrer" className="underline">
+                View transaction
+              </a>
+            ) : (
+              <span className="block break-all text-[#667185]">{result.txHash}</span>
+            )}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

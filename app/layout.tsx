@@ -4,6 +4,7 @@ import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/web/footer";
 import { Navbar } from "@/components/web/navbar";
+import { WalletProvider } from "@/components/web/wallet-provider";
 
 const satoshi = localFont({
   src: [
@@ -110,11 +111,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${satoshi.variable} ${inter.variable} ${bricolage.variable} font-sans antialiased`}>
-        <Navbar />
-        <div id="page-wrapper" className="bg-white">
-          {children}
-          <Footer />
-        </div>
+        <WalletProvider>
+          <Navbar />
+          <div id="page-wrapper" className="bg-white">
+            {children}
+            <Footer />
+          </div>
+        </WalletProvider>
       </body>
     </html>
   );

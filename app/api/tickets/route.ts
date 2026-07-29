@@ -20,6 +20,9 @@ function toApiTicket(row: typeof ticketsTable.$inferSelect) {
     paid: row.paid,
     price_in_usd: Number(row.priceInUsd),
     event_verified: row.eventVerified,
+    onchain_event_id: row.onchainEventId,
+    metadata_hash: row.metadataHash,
+    organizer_address: row.organizerAddress,
   };
 }
 

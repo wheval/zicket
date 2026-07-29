@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SwitchToggle } from "@/components/ui/switch-toggle";
+import { ConnectWalletButton } from "@/components/web/connect-wallet-button";
 import Link from "next/link";
 
 export function Navbar() {
@@ -54,6 +55,7 @@ export function Navbar() {
                 onChange={setIsAnonymous}
                 label="Anonymous Browsing"
               />
+              <ConnectWalletButton />
               <Button showIcon>
                 Host Event
               </Button>
@@ -169,6 +171,7 @@ export function Navbar() {
             <Button showIcon className="w-full justify-center">
               Host Event
             </Button>
+            <ConnectWalletButton className="w-full justify-center" />
           </div>
         </div>
       </div>

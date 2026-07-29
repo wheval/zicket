@@ -1,4 +1,9 @@
-import "dotenv/config";
+import { config } from "dotenv";
+
+config({ path: ".env.local", quiet: true });
+config({ quiet: true });
+
+import { sql } from "drizzle-orm";
 
 import { getDb } from "../src/index";
 import { newsItems, tickets } from "../lib/mock_data";
@@ -39,6 +44,14 @@ async function seed() {
 
   // Tickets
   if (tickets.length) {
+    // The fixture dates are fixed points in the past. Rebasing them onto the
+    // current date keeps every seeded event upcoming, which is what the
+    // on-chain sale window requires — a listing whose window has closed cannot
+    // be published or bought.
+    const earliest = Math.min(...tickets.map((t) => t.event_date));
+    const firstEventAt = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60;
+    const shift = firstEventAt - earliest;
+
     await db
       .insert(ticketsTable)
       .values(
@@ -49,7 +62,7 @@ async function seed() {
           image: t.image,
           noOfAttendees: t.no_of_attendees,
           attendees: t.attendees,
-          eventDate: t.event_date,
+          eventDate: t.event_date + shift,
           eventTimeInUtc: t.event_time_in_utc,
           eventLocation: t.event_location,
           anonymous: !!t.anonymous,
@@ -58,7 +71,10 @@ async function seed() {
           eventVerified: !!t.event_verified,
         }))
       )
-      .onConflictDoNothing();
+      .onConflictDoUpdate({
+        target: ticketsTable.id,
+        set: { eventDate: sql`excluded.event_date` },
+      });
   }
 
   // Newsletter: intentionally not seeded (real signups only)
