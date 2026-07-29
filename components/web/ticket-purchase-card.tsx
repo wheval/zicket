@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import type { Ticket } from "@/lib/types";
 import { useWallet } from "@/components/web/wallet-provider";
+import { ConnectWalletButton } from "@/components/web/connect-wallet-button";
 import { explorerTxUrl } from "@/lib/starknet/config";
 import { useTicketPurchase } from "@/lib/starknet/use-ticket-purchase";
 import Image from "next/image";
@@ -44,7 +45,6 @@ export function TicketPurchaseCard({
 
   const [selectedType, setSelectedType] = useState(types[0]?.id ?? "standard");
   const [email, setEmail] = useState("");
-  const [showConnectHint, setShowConnectHint] = useState(false);
 
   const { status } = useWallet();
   const { purchase, stage, error, result, isBusy } = useTicketPurchase(ticket);
@@ -137,27 +137,18 @@ export function TicketPurchaseCard({
           Secure &amp; Instant Payment
         </div>
 
-        <Button
-          variant={"secondary"}
-          showIcon
-          className="w-full h-12"
-          disabled={isBusy || stage === "done"}
-          onClick={() => {
-            if (!isConnected) {
-              setShowConnectHint(true);
-              return;
-            }
-            setShowConnectHint(false);
-            void purchase({ email: email || undefined });
-          }}
-        >
-          {buttonLabel}
-        </Button>
-
-        {showConnectHint && !isConnected && (
-          <p className="text-[12px] font-medium text-[#667185]" role="status">
-            Connect a Starknet wallet from the header to continue.
-          </p>
+        {isConnected ? (
+          <Button
+            variant={"secondary"}
+            showIcon
+            className="w-full h-12"
+            disabled={isBusy || stage === "done"}
+            onClick={() => void purchase({ email: email || undefined })}
+          >
+            {buttonLabel}
+          </Button>
+        ) : (
+          <ConnectWalletButton className="w-full justify-center h-12" />
         )}
 
         {stage === "error" && error && (

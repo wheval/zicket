@@ -1,24 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zicket
+
+Privacy-first event ticketing. **Host Freely. Attend Silently.**
+
+Browse and buy tickets without handing over an identity: alongside ordinary
+wallet-bound tickets, Zicket issues **anonymous tickets** that carry no owner
+on-chain at all — just a commitment only the holder can open.
+
+The contracts are live on **Starknet Sepolia**; see
+[On-chain layer](#on-chain-layer-starknet--cairo).
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The app runs without a chain configured — listings simply stay unpublished
+until `NEXT_PUBLIC_ZICKET_CONTRACT_ADDRESS` is set. See
+[Environment](#environment-1) for the full list.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Area | Stack |
+| --- | --- |
+| App | Next.js 16, React 19, Tailwind v4 |
+| Data | Drizzle ORM + Neon Postgres |
+| Chain | Cairo contracts on Starknet, via starknet.js |
 
 ## Database (Drizzle + Neon)
 
@@ -89,14 +97,36 @@ pnpm chain:flow       # 32 assertions through the running Next.js app
 `NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS` and the relayer credentials into
 `.env.local`. Restarting devnet resets chain state, so re-run the deploy.
 
-### Sepolia
+### Sepolia — live deployment
 
-Live on Starknet Sepolia — see [`deployments/sepolia.json`](deployments/sepolia.json).
+Deployed 2026-07-29. Canonical record: [`deployments/sepolia.json`](deployments/sepolia.json).
 
-| Contract | Address |
+| Contract | Address | Explorer |
+| --- | --- | --- |
+| `ZicketEvents` | `0x7b318fc47e158025e02cb41c6b6ae74d214e1d5b8c58241b09f8b0b452b8cbb` | [Voyager](https://sepolia.voyager.online/contract/0x7b318fc47e158025e02cb41c6b6ae74d214e1d5b8c58241b09f8b0b452b8cbb) |
+| `ZUSD` payment token (18dp) | `0x785ab439b53aa6452deaa13a8bbaca43004284e6c3bebadf07f8ebb73333f15` | [Voyager](https://sepolia.voyager.online/contract/0x785ab439b53aa6452deaa13a8bbaca43004284e6c3bebadf07f8ebb73333f15) |
+
+| | |
 | --- | --- |
-| `ZicketEvents` | `0x7b318fc47e158025e02cb41c6b6ae74d214e1d5b8c58241b09f8b0b452b8cbb` |
-| `ZUSD` payment token (18dp) | `0x785ab439b53aa6452deaa13a8bbaca43004284e6c3bebadf07f8ebb73333f15` |
+| `ZicketEvents` class hash | `0x7389d6d0d3eb5d56d385941bb3562b74f386ef1cb04155662b6bb2a192e809d` |
+| `ZUSD` class hash | `0x257e94e709dacfa2091a4ffa8fb8744d2a3c572429abf04d94202dc15681720` |
+| Deployer / fee recipient | `0x6b4ff7d3d4ec97092b655ca7569598583e6e7c236ea37c23cc2664725687994` |
+| Platform fee | 250 bps (2.5%) |
+| RPC | `https://api.cartridge.gg/x/starknet/sepolia` |
+
+Point the app at it:
+
+```bash
+NEXT_PUBLIC_STARKNET_NETWORK=sepolia
+NEXT_PUBLIC_STARKNET_RPC_URL=https://api.cartridge.gg/x/starknet/sepolia
+NEXT_PUBLIC_ZICKET_CONTRACT_ADDRESS=0x7b318fc47e158025e02cb41c6b6ae74d214e1d5b8c58241b09f8b0b452b8cbb
+NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS=0x785ab439b53aa6452deaa13a8bbaca43004284e6c3bebadf07f8ebb73333f15
+```
+
+starknet.js 8.x speaks JSON-RPC 0.9.0 — pick an endpoint that serves it. Cartridge
+does; some public Sepolia endpoints have moved to 0.10.x or shut down entirely.
+
+Redeploying:
 
 ```bash
 NEXT_PUBLIC_STARKNET_NETWORK=sepolia \
@@ -105,14 +135,17 @@ ZICKET_DEPLOY_MOCK_TOKEN=1 pnpm chain:deploy
 ```
 
 `ZICKET_DEPLOY_MOCK_TOKEN=1` is required off devnet: deploying the mock ERC-20 is
-opt-in so a real token cannot be replaced by accident. On Sepolia the mock is
-deliberate — its `mint` is permissionless, so it doubles as a faucet and any
+opt-in so a real payment token cannot be replaced by accident. On Sepolia the mock
+is deliberate — its `mint` is permissionless, so it doubles as a faucet and any
 wallet can self-serve test funds:
 
 ```bash
 starkli invoke 0x785ab439b53aa6452deaa13a8bbaca43004284e6c3bebadf07f8ebb73333f15 \
   mint <your-address> u256:1000000000000000000000
 ```
+
+Buying on Sepolia needs a real wallet (Argent X or Braavos) plus a little STRK for
+fees; the devnet burner is not available off devnet.
 
 The e2e harnesses provision their own buyer wallets on non-devnet networks —
 generated keys are cached in `.env.local` as `ZICKET_E2E_BUYER_KEYS`, funded with
@@ -135,9 +168,10 @@ unpublished rather than resolving to some unrelated event.
 | `NEXT_PUBLIC_TOKEN_USD_PRICE` | USD → token conversion for listed prices |
 | `STARKNET_ADMIN_ADDRESS` / `STARKNET_ADMIN_PRIVATE_KEY` | Server relayer that publishes listings |
 
-On `devnet` the wallet menu also offers a predeployed burner account, so the
-purchase flow can be exercised without a browser extension. On Sepolia and
-mainnet a real wallet (Argent X or Braavos) is required.
+Wallet connection lives on the ticket page: the purchase button becomes
+**Connect Wallet** until a wallet is connected. On `devnet` that menu also offers
+a predeployed burner account, so the flow can be exercised without a browser
+extension. On Sepolia and mainnet a real wallet (Argent X or Braavos) is required.
 
 ### API
 
@@ -171,18 +205,14 @@ docker run -d --name zicket-neon-proxy -p 4444:4444 \
 Then set `NEON_HTTP_ENDPOINT=http://localhost:4444/sql` alongside
 `DATABASE_URL`. Against a real Neon database, leave `NEON_HTTP_ENDPOINT` unset.
 
+## Scripts
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` / `pnpm build` / `pnpm start` | Next.js |
+| `pnpm db:push` / `db:generate` / `db:migrate` / `db:seed` | Drizzle |
+| `pnpm contracts:build` / `contracts:test` | scarb + snforge (36 tests) |
+| `pnpm chain:devnet` | starknet-devnet in Docker on :5050 |
+| `pnpm chain:deploy` | Declare + deploy, writes `deployments/` and `.env.local` |
+| `pnpm chain:e2e` | 20 assertions straight against the contracts |
+| `pnpm chain:flow` | 32 assertions through the running app |
