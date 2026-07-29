@@ -87,9 +87,7 @@ fn fund_approval(ctx: Ctx, who: ContractAddress) {
 
 fn create_default_event(ctx: Ctx, anonymous_allowed: bool) -> u64 {
     start_cheat_caller_address(ctx.zicket_address, organizer());
-    let id = ctx
-        .zicket
-        .create_event('META', PRICE, 100, START_TIME, END_TIME, anonymous_allowed);
+    let id = ctx.zicket.create_event('META', PRICE, 100, START_TIME, END_TIME, anonymous_allowed);
     stop_cheat_caller_address(ctx.zicket_address);
     id
 }

@@ -149,9 +149,7 @@ pub mod MockERC20 {
             self.balances.entry(recipient).write(self.balances.entry(recipient).read() + amount);
             self
                 .emit(
-                    Event::Transfer(
-                        Transfer { from: Zero::zero(), to: recipient, value: amount },
-                    ),
+                    Event::Transfer(Transfer { from: Zero::zero(), to: recipient, value: amount }),
                 );
         }
 

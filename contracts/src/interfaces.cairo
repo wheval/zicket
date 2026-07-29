@@ -7,15 +7,10 @@ use zicket::types::{EventData, TicketData};
 #[starknet::interface]
 pub trait IERC20<TContractState> {
     fn balance_of(self: @TContractState, account: ContractAddress) -> u256;
-    fn allowance(
-        self: @TContractState, owner: ContractAddress, spender: ContractAddress,
-    ) -> u256;
+    fn allowance(self: @TContractState, owner: ContractAddress, spender: ContractAddress) -> u256;
     fn transfer(ref self: TContractState, recipient: ContractAddress, amount: u256) -> bool;
     fn transfer_from(
-        ref self: TContractState,
-        sender: ContractAddress,
-        recipient: ContractAddress,
-        amount: u256,
+        ref self: TContractState, sender: ContractAddress, recipient: ContractAddress, amount: u256,
     ) -> bool;
     fn approve(ref self: TContractState, spender: ContractAddress, amount: u256) -> bool;
 }
@@ -23,7 +18,7 @@ pub trait IERC20<TContractState> {
 /// Core ticketing interface.
 #[starknet::interface]
 pub trait IZicketEvents<TContractState> {
-    // ── Organizer ────────────────────────────────────────────────────────────
+    // ── Organizer ──
     fn create_event(
         ref self: TContractState,
         metadata_hash: felt252,
@@ -36,11 +31,9 @@ pub trait IZicketEvents<TContractState> {
     fn cancel_event(ref self: TContractState, event_id: u64);
     fn withdraw(ref self: TContractState, event_id: u64) -> u256;
 
-    // ── Attendee ─────────────────────────────────────────────────────────────
+    // ── Attendee ──
     fn buy_ticket(ref self: TContractState, event_id: u64) -> u64;
-    fn buy_ticket_anonymous(
-        ref self: TContractState, event_id: u64, commitment: felt252,
-    ) -> u64;
+    fn buy_ticket_anonymous(ref self: TContractState, event_id: u64, commitment: felt252) -> u64;
     fn transfer_ticket(ref self: TContractState, ticket_id: u64, to: ContractAddress);
     fn check_in(ref self: TContractState, ticket_id: u64);
     fn check_in_anonymous(
@@ -55,7 +48,7 @@ pub trait IZicketEvents<TContractState> {
         recipient: ContractAddress,
     ) -> u256;
 
-    // ── Views ────────────────────────────────────────────────────────────────
+    // ── Views ──
     fn get_event(self: @TContractState, event_id: u64) -> EventData;
     fn get_ticket(self: @TContractState, ticket_id: u64) -> TicketData;
     fn ticket_of(self: @TContractState, event_id: u64, attendee: ContractAddress) -> u64;
@@ -67,7 +60,7 @@ pub trait IZicketEvents<TContractState> {
     fn compute_commitment(self: @TContractState, secret: felt252, nullifier: felt252) -> felt252;
     fn compute_nullifier_hash(self: @TContractState, nullifier: felt252) -> felt252;
 
-    // ── Admin ────────────────────────────────────────────────────────────────
+    // ── Admin ──
     fn payment_token(self: @TContractState) -> ContractAddress;
     fn platform_fee_bps(self: @TContractState) -> u16;
     fn fee_recipient(self: @TContractState) -> ContractAddress;

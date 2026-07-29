@@ -1,5 +1,7 @@
 # Zicket
 
+[![CI](https://github.com/wheval/zicket/actions/workflows/ci.yml/badge.svg)](https://github.com/wheval/zicket/actions/workflows/ci.yml)
+
 Privacy-first event ticketing. **Host Freely. Attend Silently.**
 
 Browse and buy tickets without handing over an identity: alongside ordinary
@@ -216,3 +218,20 @@ Then set `NEON_HTTP_ENDPOINT=http://localhost:4444/sql` alongside
 | `pnpm chain:deploy` | Declare + deploy, writes `deployments/` and `.env.local` |
 | `pnpm chain:e2e` | 20 assertions straight against the contracts |
 | `pnpm chain:flow` | 32 assertions through the running app |
+
+## CI
+
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs three jobs on every PR:
+
+| Job | Covers |
+| --- | --- |
+| `contracts` | `scarb fmt --check`, `scarb build`, `snforge test` |
+| `app` | `eslint`, `tsc --noEmit`, `next build` against Postgres + the Neon HTTP proxy |
+| `chain` | Boots devnet, deploys, runs the 20 contract assertions |
+
+The build job needs a database because `/` and `/explore` are prerendered from
+it. Migrations are applied with `psql` rather than `drizzle-kit`, which uses
+Neon's WebSocket driver — the HTTP proxy only speaks HTTP.
+
+`chain:flow` is not in CI: it drives a running server against a deployed chain,
+which is covered well enough by the `app` and `chain` jobs separately.

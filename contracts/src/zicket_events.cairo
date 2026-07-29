@@ -24,9 +24,7 @@ pub mod ZicketEvents {
     use core::num::traits::Zero;
     use core::poseidon::PoseidonTrait;
     use starknet::storage::*;
-    use starknet::{
-        ContractAddress, get_block_timestamp, get_caller_address, get_contract_address,
-    };
+    use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address};
     use zicket::interfaces::{IERC20Dispatcher, IERC20DispatcherTrait, IZicketEvents};
     use zicket::types::{EventData, TicketData, TicketMode};
 
@@ -222,7 +220,7 @@ pub mod ZicketEvents {
 
     #[abi(embed_v0)]
     pub impl ZicketEventsImpl of IZicketEvents<ContractState> {
-        // ── Organizer ────────────────────────────────────────────────────────
+        // ── Organizer ──
         fn create_event(
             ref self: ContractState,
             metadata_hash: felt252,
@@ -314,9 +312,7 @@ pub mod ZicketEvents {
             if gross > 0 {
                 let token = IERC20Dispatcher { contract_address: self.payment_token.read() };
                 if fee > 0 {
-                    assert(
-                        token.transfer(self.fee_recipient.read(), fee), Errors::PAYMENT_FAILED,
-                    );
+                    assert(token.transfer(self.fee_recipient.read(), fee), Errors::PAYMENT_FAILED);
                 }
                 if payout > 0 {
                     assert(token.transfer(caller, payout), Errors::PAYMENT_FAILED);
@@ -327,10 +323,7 @@ pub mod ZicketEvents {
                 .emit(
                     Event::Withdrawn(
                         Withdrawn {
-                            event_id,
-                            organizer: caller,
-                            organizer_amount: payout,
-                            fee_amount: fee,
+                            event_id, organizer: caller, organizer_amount: payout, fee_amount: fee,
                         },
                     ),
                 );
@@ -338,7 +331,7 @@ pub mod ZicketEvents {
             payout
         }
 
-        // ── Attendee ─────────────────────────────────────────────────────────
+        // ── Attendee ──
         fn buy_ticket(ref self: ContractState, event_id: u64) -> u64 {
             let mut event = self._load_event(event_id);
             let buyer = get_caller_address();
@@ -463,12 +456,7 @@ pub mod ZicketEvents {
             self.ticket_by_attendee.entry(ticket.event_id).entry(caller).write(0);
             self.ticket_by_attendee.entry(ticket.event_id).entry(to).write(ticket_id);
 
-            self
-                .emit(
-                    Event::TicketTransferred(
-                        TicketTransferred { ticket_id, from: caller, to },
-                    ),
-                );
+            self.emit(Event::TicketTransferred(TicketTransferred { ticket_id, from: caller, to }));
         }
 
         fn check_in(ref self: ContractState, ticket_id: u64) {
@@ -477,9 +465,7 @@ pub mod ZicketEvents {
             let caller = get_caller_address();
 
             assert(ticket.mode == TicketMode::Public, Errors::NOT_PUBLIC_TICKET);
-            assert(
-                ticket.owner == caller || event.organizer == caller, Errors::NOT_TICKET_OWNER,
-            );
+            assert(ticket.owner == caller || event.organizer == caller, Errors::NOT_TICKET_OWNER);
             assert(!event.cancelled, Errors::EVENT_CANCELLED);
             assert(!ticket.checked_in, Errors::ALREADY_CHECKED_IN);
 
@@ -573,7 +559,7 @@ pub mod ZicketEvents {
             self._settle_refund(ticket_id, ref ticket, recipient)
         }
 
-        // ── Views ────────────────────────────────────────────────────────────
+        // ── Views ──
         fn get_event(self: @ContractState, event_id: u64) -> EventData {
             self.events.entry(event_id).read()
         }
@@ -586,15 +572,11 @@ pub mod ZicketEvents {
             self.ticket_by_attendee.entry(event_id).entry(attendee).read()
         }
 
-        fn ticket_of_commitment(
-            self: @ContractState, event_id: u64, commitment: felt252,
-        ) -> u64 {
+        fn ticket_of_commitment(self: @ContractState, event_id: u64, commitment: felt252) -> u64 {
             self.ticket_by_commitment.entry(event_id).entry(commitment).read()
         }
 
-        fn is_nullifier_used(
-            self: @ContractState, event_id: u64, nullifier_hash: felt252,
-        ) -> bool {
+        fn is_nullifier_used(self: @ContractState, event_id: u64, nullifier_hash: felt252) -> bool {
             self.nullifier_used.entry(event_id).entry(nullifier_hash).read()
         }
 
@@ -625,7 +607,7 @@ pub mod ZicketEvents {
             self._nullifier_hash(nullifier)
         }
 
-        // ── Admin ────────────────────────────────────────────────────────────
+        // ── Admin ──
         fn payment_token(self: @ContractState) -> ContractAddress {
             self.payment_token.read()
         }
@@ -670,9 +652,7 @@ pub mod ZicketEvents {
             self.owner.write(new_owner);
             self
                 .emit(
-                    Event::OwnershipTransferred(
-                        OwnershipTransferred { previous_owner, new_owner },
-                    ),
+                    Event::OwnershipTransferred(OwnershipTransferred { previous_owner, new_owner }),
                 );
         }
     }
@@ -710,8 +690,7 @@ pub mod ZicketEvents {
             }
             let token = IERC20Dispatcher { contract_address: self.payment_token.read() };
             assert(
-                token.transfer_from(payer, get_contract_address(), amount),
-                Errors::PAYMENT_FAILED,
+                token.transfer_from(payer, get_contract_address(), amount), Errors::PAYMENT_FAILED,
             );
         }
 
