@@ -79,3 +79,27 @@ export function formatTokenUnits(amount: bigint, maxFractionDigits = 4): string 
     .replace(/0+$/, "");
   return fractionStr ? `${whole}.${fractionStr}` : whole.toString();
 }
+
+/**
+ * True when a listing's stored `onchain_event_id` was issued by the contract
+ * this app is currently configured against.
+ *
+ * Event ids restart at 1 for every ZicketEvents deployment, so a listing
+ * published against a different contract — a redeploy, or devnet vs sepolia —
+ * would otherwise be read back against the wrong one and silently resolve to
+ * an unrelated or non-existent event.
+ *
+ * Rows written before the address was recorded are trusted, since only one
+ * deployment existed at the time.
+ */
+export function isPublishedToCurrentDeployment<
+  T extends {
+    onchain_event_id?: number | null;
+    onchain_contract_address?: string | null;
+  },
+>(ticket: T): ticket is T & { onchain_event_id: number } {
+  if (!ticket.onchain_event_id) return false;
+  if (!ticket.onchain_contract_address) return true;
+  if (!ZICKET_CONTRACT_ADDRESS) return false;
+  return BigInt(ticket.onchain_contract_address) === BigInt(ZICKET_CONTRACT_ADDRESS);
+}

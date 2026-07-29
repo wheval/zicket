@@ -14,18 +14,9 @@ import { join } from "node:path";
 import { Account, CallData, Contract, cairo, type RpcProvider } from "starknet";
 
 import { computeCommitment, computeNullifierHash, generateTicketSecret } from "../../lib/starknet/commitment";
+import { provisionBuyers } from "./buyers";
 import { assertNodeReachable, getDeployer, getProvider, NETWORK, ROOT } from "./common";
 
-const DEVNET_BUYERS = [
-  {
-    address: "0x78662e7352d062084b0010068b99288486c2d8b914f6e2a55ce945f8792c8b1",
-    privateKey: "0xe1406455b7d66b1690803be066cbe5e",
-  },
-  {
-    address: "0x49dfb8ce986e21d354ac93ea65e6a11f639c1934ea253e5ff14ca62eca0f38e",
-    privateKey: "0xa20a02f0ac53692d144b20cb371a60d7",
-  },
-];
 
 const PRICE = 5n * 10n ** 18n;
 const FUNDING = 1000n * 10n ** 18n;
@@ -95,9 +86,7 @@ async function main() {
 
   // ── 1. Fund buyers ─────────────────────────────────────────────────────────
   console.log("\n[1] fund buyers");
-  const buyers = DEVNET_BUYERS.map(
-    (b) => new Account({ provider, address: b.address, signer: b.privateKey }),
-  );
+  const buyers = await provisionBuyers(provider, 2);
 
   for (const buyer of buyers) {
     await send(admin, {

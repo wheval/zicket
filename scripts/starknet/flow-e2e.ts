@@ -11,10 +11,18 @@
 import { Account, RpcProvider, cairo, CallData } from "starknet";
 
 import { computeCommitment, randomFelt } from "../../lib/starknet/commitment";
+import { provisionBuyerWallets } from "./buyers";
 // Importing common also loads .env.local / .env into process.env.
-import { RPC_URL } from "./common";
+import { NETWORK, RPC_URL } from "./common";
 
 const APP_URL = process.env.APP_URL ?? "http://localhost:3100";
+
+/**
+ * Wallets to provision on a public network. Each costs a fund + deploy
+ * transaction on first run, and a public ticket is one-per-address, so this
+ * also caps how many times the harness can re-run before it needs more.
+ */
+const SHOPPER_COUNT = Number(process.env.ZICKET_FLOW_SHOPPERS ?? 3);
 
 let passed = 0;
 let failed = 0;
@@ -58,6 +66,23 @@ async function devnetAccounts(rpcUrl: string): Promise<DevnetAccount[]> {
   return body.result ?? [];
 }
 
+/**
+ * Stand-ins for shoppers' browser wallets. Devnet hands us a pool of ready
+ * accounts; on a public network we provision (fund + deploy) a small set.
+ */
+async function shopperWallets(
+  provider: RpcProvider,
+  rpcUrl: string,
+  adminAddress: string,
+): Promise<DevnetAccount[]> {
+  if (NETWORK === "devnet") {
+    return (await devnetAccounts(rpcUrl)).filter(
+      (w) => BigInt(w.address) !== BigInt(adminAddress),
+    );
+  }
+  return provisionBuyerWallets(provider, SHOPPER_COUNT);
+}
+
 /** A public ticket binds to one address, so re-runs need a fresh buyer. */
 async function firstWalletWithoutTicket(
   provider: RpcProvider,
@@ -89,10 +114,8 @@ async function main() {
   // Devnet's predeployed accounts stand in for shoppers' browser wallets. A
   // public ticket is one-per-address, so each run needs an address that does
   // not already hold one — otherwise the contract correctly rejects the buy.
-  const wallets = (await devnetAccounts(rpcUrl)).filter(
-    (w) => BigInt(w.address) !== BigInt(adminAddress),
-  );
-  if (wallets.length === 0) throw new Error("No devnet accounts available");
+  const wallets = await shopperWallets(provider, rpcUrl, adminAddress);
+  if (wallets.length === 0) throw new Error("No buyer accounts available");
 
   console.log(`\nApp:      ${APP_URL}`);
   console.log(`RPC:      ${rpcUrl}`);

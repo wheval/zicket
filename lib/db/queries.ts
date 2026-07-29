@@ -29,6 +29,7 @@ function mapRowToTicket(row: typeof ticketsTable.$inferSelect): Ticket {
     price_in_usd: Number(row.priceInUsd),
     event_verified: row.eventVerified,
     onchain_event_id: row.onchainEventId,
+    onchain_contract_address: row.onchainContractAddress,
     metadata_hash: row.metadataHash,
     organizer_address: row.organizerAddress,
     publish_tx_hash: row.publishTxHash,
@@ -136,6 +137,7 @@ export async function getRelatedNews(excludeId: string, limit = 3): Promise<News
 export async function markTicketPublished(params: {
   ticketId: string;
   onchainEventId: number;
+  onchainContractAddress: string;
   metadataHash: string;
   organizerAddress: string;
   publishTxHash: string;
@@ -145,6 +147,7 @@ export async function markTicketPublished(params: {
     .update(ticketsTable)
     .set({
       onchainEventId: params.onchainEventId,
+      onchainContractAddress: params.onchainContractAddress,
       metadataHash: params.metadataHash,
       organizerAddress: params.organizerAddress,
       publishTxHash: params.publishTxHash,

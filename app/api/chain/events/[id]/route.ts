@@ -3,7 +3,11 @@ import { NextResponse } from "next/server";
 import { CallData, cairo } from "starknet";
 
 import { getTicketById, markTicketPublished } from "@/lib/db/queries";
-import { usdToTokenUnits, ZICKET_CONTRACT_ADDRESS } from "@/lib/starknet/config";
+import {
+  isPublishedToCurrentDeployment,
+  usdToTokenUnits,
+  ZICKET_CONTRACT_ADDRESS,
+} from "@/lib/starknet/config";
 import { metadataHashForTicket } from "@/lib/starknet/metadata";
 import {
   eventIdFromReceipt,
@@ -24,7 +28,7 @@ export async function GET(_req: Request, { params }: Props) {
   const ticket = await getTicketById(id);
   if (!ticket) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  if (!ticket.onchain_event_id) {
+  if (!isPublishedToCurrentDeployment(ticket)) {
     return NextResponse.json({ published: false, ticketId: id });
   }
 
@@ -79,14 +83,13 @@ export async function POST(_req: Request, { params }: Props) {
   const ticket = await getTicketById(id);
   if (!ticket) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  if (ticket.onchain_event_id) {
+  if (isPublishedToCurrentDeployment(ticket)) {
     return NextResponse.json({
       published: true,
       alreadyPublished: true,
       onchainEventId: ticket.onchain_event_id,
     });
   }
-
   const price = ticket.paid ? usdToTokenUnits(ticket.price_in_usd) : 0n;
   const metadataHash = metadataHashForTicket(ticket);
   const startTime = ticket.event_date;
@@ -126,6 +129,7 @@ export async function POST(_req: Request, { params }: Props) {
     await markTicketPublished({
       ticketId: id,
       onchainEventId,
+      onchainContractAddress: ZICKET_CONTRACT_ADDRESS,
       metadataHash,
       organizerAddress: admin.address,
       publishTxHash: transaction_hash,

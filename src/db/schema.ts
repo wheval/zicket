@@ -51,6 +51,13 @@ export const tickets = pgTable("tickets", {
   // Null until the listing has been published to the ZicketEvents contract by
   // POST /api/chain/events/[id]/publish.
   onchainEventId: integer("onchain_event_id"),
+  /**
+   * The ZicketEvents deployment `onchain_event_id` belongs to. Event ids restart
+   * at 1 for every deployment, so without this a listing published against one
+   * contract would be read back against another (e.g. after switching from
+   * devnet to sepolia) and silently resolve to an unrelated or empty event.
+   */
+  onchainContractAddress: varchar("onchain_contract_address", { length: 66 }),
   /** Poseidon commitment to the immutable listing fields (lib/starknet/metadata.ts). */
   metadataHash: varchar("metadata_hash", { length: 66 }),
   organizerAddress: varchar("organizer_address", { length: 66 }),

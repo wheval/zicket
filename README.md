@@ -89,6 +89,41 @@ pnpm chain:flow       # 32 assertions through the running Next.js app
 `NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS` and the relayer credentials into
 `.env.local`. Restarting devnet resets chain state, so re-run the deploy.
 
+### Sepolia
+
+Live on Starknet Sepolia — see [`deployments/sepolia.json`](deployments/sepolia.json).
+
+| Contract | Address |
+| --- | --- |
+| `ZicketEvents` | `0x7b318fc47e158025e02cb41c6b6ae74d214e1d5b8c58241b09f8b0b452b8cbb` |
+| `ZUSD` payment token (18dp) | `0x785ab439b53aa6452deaa13a8bbaca43004284e6c3bebadf07f8ebb73333f15` |
+
+```bash
+NEXT_PUBLIC_STARKNET_NETWORK=sepolia \
+NEXT_PUBLIC_STARKNET_RPC_URL=https://api.cartridge.gg/x/starknet/sepolia \
+ZICKET_DEPLOY_MOCK_TOKEN=1 pnpm chain:deploy
+```
+
+`ZICKET_DEPLOY_MOCK_TOKEN=1` is required off devnet: deploying the mock ERC-20 is
+opt-in so a real token cannot be replaced by accident. On Sepolia the mock is
+deliberate — its `mint` is permissionless, so it doubles as a faucet and any
+wallet can self-serve test funds:
+
+```bash
+starkli invoke 0x785ab439b53aa6452deaa13a8bbaca43004284e6c3bebadf07f8ebb73333f15 \
+  mint <your-address> u256:1000000000000000000000
+```
+
+The e2e harnesses provision their own buyer wallets on non-devnet networks —
+generated keys are cached in `.env.local` as `ZICKET_E2E_BUYER_KEYS`, funded with
+STRK from the deployer and counterfactually deployed. Both suites pass against
+live Sepolia (20 contract assertions, 32 full-stack).
+
+Event ids restart at 1 for every deployment, so a listing's `onchain_event_id` is
+stored alongside the `onchain_contract_address` that issued it. Point the app at a
+different deployment and previously published listings correctly read as
+unpublished rather than resolving to some unrelated event.
+
 ### Environment
 
 | Variable | Purpose |
@@ -101,7 +136,8 @@ pnpm chain:flow       # 32 assertions through the running Next.js app
 | `STARKNET_ADMIN_ADDRESS` / `STARKNET_ADMIN_PRIVATE_KEY` | Server relayer that publishes listings |
 
 On `devnet` the wallet menu also offers a predeployed burner account, so the
-purchase flow can be exercised without a browser extension.
+purchase flow can be exercised without a browser extension. On Sepolia and
+mainnet a real wallet (Argent X or Braavos) is required.
 
 ### API
 

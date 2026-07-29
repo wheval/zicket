@@ -25,6 +25,11 @@ const TOKEN_NAME = process.env.ZICKET_TOKEN_NAME ?? "Zicket USD";
 const TOKEN_SYMBOL = process.env.ZICKET_TOKEN_SYMBOL ?? "ZUSD";
 const TOKEN_DECIMALS = Number(process.env.ZICKET_TOKEN_DECIMALS ?? 18);
 const TOKEN_SUPPLY = BigInt(process.env.ZICKET_TOKEN_SUPPLY ?? 10n ** 27n);
+/**
+ * Opt-in to deploying `MockERC20` on a public network. Its `mint` is
+ * permissionless, so on a testnet it doubles as a self-service faucet.
+ */
+const DEPLOY_MOCK_TOKEN = process.env.ZICKET_DEPLOY_MOCK_TOKEN === "1";
 
 interface Artifact {
   sierra: CompiledSierra;
@@ -99,10 +104,11 @@ async function main() {
 
   if (paymentToken) {
     console.log(`  using existing payment token ${paymentToken}`);
-  } else if (NETWORK !== "devnet") {
+  } else if (NETWORK !== "devnet" && !DEPLOY_MOCK_TOKEN) {
     throw new Error(
       `PAYMENT_TOKEN_ADDRESS must be set for "${NETWORK}" — ` +
-        "the mock token is only deployed on devnet.",
+        "the mock token is only deployed on devnet. Set ZICKET_DEPLOY_MOCK_TOKEN=1 " +
+        "to deploy it anyway as a public-faucet test token.",
     );
   } else {
     const { abi } = loadArtifact("MockERC20");

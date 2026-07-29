@@ -1,0 +1,1 @@
+ALTER TABLE "tickets" ADD COLUMN "onchain_contract_address" varchar(66);

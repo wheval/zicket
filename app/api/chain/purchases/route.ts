@@ -6,6 +6,7 @@ import {
   incrementAttendeeCount,
   recordPurchase,
 } from "@/lib/db/queries";
+import { isPublishedToCurrentDeployment } from "@/lib/starknet/config";
 import { verifyPurchaseTx } from "@/lib/starknet/server";
 
 /** `GET /api/chain/purchases?ticketId=…` — purchases recorded for a listing. */
@@ -59,7 +60,7 @@ export async function POST(req: Request) {
   if (!ticket) {
     return NextResponse.json({ error: "Unknown ticket" }, { status: 404 });
   }
-  if (!ticket.onchain_event_id) {
+  if (!isPublishedToCurrentDeployment(ticket)) {
     return NextResponse.json(
       { error: "This listing has not been published on-chain yet" },
       { status: 409 },

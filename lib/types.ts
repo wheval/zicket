@@ -14,6 +14,8 @@ export interface Ticket {
     event_verified?: boolean,
     /** Id of this listing inside the ZicketEvents contract; null until published. */
     onchain_event_id?: number | null,
+    /** The ZicketEvents deployment `onchain_event_id` was issued by. */
+    onchain_contract_address?: string | null,
     /** Poseidon commitment to the listing metadata, as published on-chain. */
     metadata_hash?: string | null,
     organizer_address?: string | null,
