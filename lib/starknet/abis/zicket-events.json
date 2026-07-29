@@ -1,0 +1,956 @@
+[
+  {
+    "type": "impl",
+    "name": "ZicketEventsImpl",
+    "interface_name": "zicket::interfaces::IZicketEvents"
+  },
+  {
+    "type": "struct",
+    "name": "core::integer::u256",
+    "members": [
+      {
+        "name": "low",
+        "type": "core::integer::u128"
+      },
+      {
+        "name": "high",
+        "type": "core::integer::u128"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "core::bool",
+    "variants": [
+      {
+        "name": "False",
+        "type": "()"
+      },
+      {
+        "name": "True",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "zicket::types::EventData",
+    "members": [
+      {
+        "name": "organizer",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "metadata_hash",
+        "type": "core::felt252"
+      },
+      {
+        "name": "price",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "max_attendees",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "tickets_sold",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "start_time",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "end_time",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "anonymous_allowed",
+        "type": "core::bool"
+      },
+      {
+        "name": "cancelled",
+        "type": "core::bool"
+      },
+      {
+        "name": "escrow",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "withdrawn",
+        "type": "core::bool"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "zicket::types::TicketMode",
+    "variants": [
+      {
+        "name": "Public",
+        "type": "()"
+      },
+      {
+        "name": "Anonymous",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "zicket::types::TicketData",
+    "members": [
+      {
+        "name": "event_id",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "owner",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "commitment",
+        "type": "core::felt252"
+      },
+      {
+        "name": "mode",
+        "type": "zicket::types::TicketMode"
+      },
+      {
+        "name": "paid",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "purchased_at",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "checked_in",
+        "type": "core::bool"
+      },
+      {
+        "name": "refunded",
+        "type": "core::bool"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "zicket::interfaces::IZicketEvents",
+    "items": [
+      {
+        "type": "function",
+        "name": "create_event",
+        "inputs": [
+          {
+            "name": "metadata_hash",
+            "type": "core::felt252"
+          },
+          {
+            "name": "price",
+            "type": "core::integer::u256"
+          },
+          {
+            "name": "max_attendees",
+            "type": "core::integer::u32"
+          },
+          {
+            "name": "start_time",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "end_time",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "anonymous_allowed",
+            "type": "core::bool"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "cancel_event",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "withdraw",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u256"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "buy_ticket",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "buy_ticket_anonymous",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "commitment",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "transfer_ticket",
+        "inputs": [
+          {
+            "name": "ticket_id",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "to",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "check_in",
+        "inputs": [
+          {
+            "name": "ticket_id",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "check_in_anonymous",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "secret",
+            "type": "core::felt252"
+          },
+          {
+            "name": "nullifier",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "refund",
+        "inputs": [
+          {
+            "name": "ticket_id",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u256"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "refund_anonymous",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "secret",
+            "type": "core::felt252"
+          },
+          {
+            "name": "nullifier",
+            "type": "core::felt252"
+          },
+          {
+            "name": "recipient",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u256"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "get_event",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "zicket::types::EventData"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_ticket",
+        "inputs": [
+          {
+            "name": "ticket_id",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "zicket::types::TicketData"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "ticket_of",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "attendee",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "ticket_of_commitment",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "commitment",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "is_nullifier_used",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "nullifier_hash",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::bool"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "tickets_remaining",
+        "inputs": [
+          {
+            "name": "event_id",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u32"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "events_count",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "tickets_count",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "compute_commitment",
+        "inputs": [
+          {
+            "name": "secret",
+            "type": "core::felt252"
+          },
+          {
+            "name": "nullifier",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "compute_nullifier_hash",
+        "inputs": [
+          {
+            "name": "nullifier",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "payment_token",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "platform_fee_bps",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u16"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "fee_recipient",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "owner",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "set_platform_fee_bps",
+        "inputs": [
+          {
+            "name": "bps",
+            "type": "core::integer::u16"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "set_fee_recipient",
+        "inputs": [
+          {
+            "name": "recipient",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "transfer_ownership",
+        "inputs": [
+          {
+            "name": "new_owner",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
+  },
+  {
+    "type": "constructor",
+    "name": "constructor",
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "payment_token",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "fee_recipient",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "platform_fee_bps",
+        "type": "core::integer::u16"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::EventCreated",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "event_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "organizer",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "key"
+      },
+      {
+        "name": "metadata_hash",
+        "type": "core::felt252",
+        "kind": "data"
+      },
+      {
+        "name": "price",
+        "type": "core::integer::u256",
+        "kind": "data"
+      },
+      {
+        "name": "max_attendees",
+        "type": "core::integer::u32",
+        "kind": "data"
+      },
+      {
+        "name": "start_time",
+        "type": "core::integer::u64",
+        "kind": "data"
+      },
+      {
+        "name": "end_time",
+        "type": "core::integer::u64",
+        "kind": "data"
+      },
+      {
+        "name": "anonymous_allowed",
+        "type": "core::bool",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::EventCancelled",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "event_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "cancelled_at",
+        "type": "core::integer::u64",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::TicketPurchased",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "event_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "ticket_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "buyer",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "key"
+      },
+      {
+        "name": "price",
+        "type": "core::integer::u256",
+        "kind": "data"
+      },
+      {
+        "name": "purchased_at",
+        "type": "core::integer::u64",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::AnonymousTicketPurchased",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "event_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "ticket_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "commitment",
+        "type": "core::felt252",
+        "kind": "data"
+      },
+      {
+        "name": "price",
+        "type": "core::integer::u256",
+        "kind": "data"
+      },
+      {
+        "name": "purchased_at",
+        "type": "core::integer::u64",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::TicketTransferred",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "ticket_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "from",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "key"
+      },
+      {
+        "name": "to",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "key"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::CheckedIn",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "event_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "ticket_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "anonymous",
+        "type": "core::bool",
+        "kind": "data"
+      },
+      {
+        "name": "nullifier_hash",
+        "type": "core::felt252",
+        "kind": "data"
+      },
+      {
+        "name": "checked_in_at",
+        "type": "core::integer::u64",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::Refunded",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "event_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "ticket_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "recipient",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "amount",
+        "type": "core::integer::u256",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::Withdrawn",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "event_id",
+        "type": "core::integer::u64",
+        "kind": "key"
+      },
+      {
+        "name": "organizer",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "key"
+      },
+      {
+        "name": "organizer_amount",
+        "type": "core::integer::u256",
+        "kind": "data"
+      },
+      {
+        "name": "fee_amount",
+        "type": "core::integer::u256",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::PlatformFeeUpdated",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "old_bps",
+        "type": "core::integer::u16",
+        "kind": "data"
+      },
+      {
+        "name": "new_bps",
+        "type": "core::integer::u16",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::FeeRecipientUpdated",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "old_recipient",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "new_recipient",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::OwnershipTransferred",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "previous_owner",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "key"
+      },
+      {
+        "name": "new_owner",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "key"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "zicket::zicket_events::ZicketEvents::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "EventCreated",
+        "type": "zicket::zicket_events::ZicketEvents::EventCreated",
+        "kind": "nested"
+      },
+      {
+        "name": "EventCancelled",
+        "type": "zicket::zicket_events::ZicketEvents::EventCancelled",
+        "kind": "nested"
+      },
+      {
+        "name": "TicketPurchased",
+        "type": "zicket::zicket_events::ZicketEvents::TicketPurchased",
+        "kind": "nested"
+      },
+      {
+        "name": "AnonymousTicketPurchased",
+        "type": "zicket::zicket_events::ZicketEvents::AnonymousTicketPurchased",
+        "kind": "nested"
+      },
+      {
+        "name": "TicketTransferred",
+        "type": "zicket::zicket_events::ZicketEvents::TicketTransferred",
+        "kind": "nested"
+      },
+      {
+        "name": "CheckedIn",
+        "type": "zicket::zicket_events::ZicketEvents::CheckedIn",
+        "kind": "nested"
+      },
+      {
+        "name": "Refunded",
+        "type": "zicket::zicket_events::ZicketEvents::Refunded",
+        "kind": "nested"
+      },
+      {
+        "name": "Withdrawn",
+        "type": "zicket::zicket_events::ZicketEvents::Withdrawn",
+        "kind": "nested"
+      },
+      {
+        "name": "PlatformFeeUpdated",
+        "type": "zicket::zicket_events::ZicketEvents::PlatformFeeUpdated",
+        "kind": "nested"
+      },
+      {
+        "name": "FeeRecipientUpdated",
+        "type": "zicket::zicket_events::ZicketEvents::FeeRecipientUpdated",
+        "kind": "nested"
+      },
+      {
+        "name": "OwnershipTransferred",
+        "type": "zicket::zicket_events::ZicketEvents::OwnershipTransferred",
+        "kind": "nested"
+      }
+    ]
+  }
+]

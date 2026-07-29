@@ -1,0 +1,22 @@
+{
+  "network": "devnet",
+  "chainId": "0x534e5f5345504f4c4941",
+  "rpcUrl": "http://127.0.0.1:5050",
+  "deployer": "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691",
+  "feeRecipient": "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691",
+  "platformFeeBps": 250,
+  "deployedAt": "2026-07-29T01:47:49.840Z",
+  "contracts": {
+    "ZicketEvents": {
+      "address": "0x5cd4415712902454e685b57c5717c9855e6af06421be621753cf09679e7f91c",
+      "classHash": "0x7389d6d0d3eb5d56d385941bb3562b74f386ef1cb04155662b6bb2a192e809d"
+    },
+    "PaymentToken": {
+      "address": "0x74193d47322272e5dc06d3d67da225a4e46ae2ec55b3d4ed8e1931f2a731dcb",
+      "classHash": "0x257e94e709dacfa2091a4ffa8fb8744d2a3c572429abf04d94202dc15681720",
+      "symbol": "ZUSD",
+      "decimals": 18,
+      "mock": true
+    }
+  }
+}

@@ -1,0 +1,167 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SCARB_VERSION: 2.14.0
+  SNFOUNDRY_VERSION: 0.62.1
+  NODE_VERSION: 24
+  PNPM_VERSION: 10
+
+jobs:
+  contracts:
+    name: Cairo contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: software-mansion/setup-scarb@v1
+        with:
+          scarb-version: ${{ env.SCARB_VERSION }}
+          scarb-lock: contracts/Scarb.lock
+
+      - uses: foundry-rs/setup-snfoundry@v6
+        with:
+          starknet-foundry-version: ${{ env.SNFOUNDRY_VERSION }}
+
+      - name: Check formatting
+        working-directory: contracts
+        run: scarb fmt --check
+
+      - name: Build
+        working-directory: contracts
+        run: scarb build
+
+      - name: Test
+        working-directory: contracts
+        run: snforge test
+
+  app:
+    name: Lint, types, build
+    runs-on: ubuntu-latest
+
+    # The prerendered pages read from Postgres at build time, and the app talks
+    # to it over Neon's HTTP driver — hence the proxy in front of a plain
+    # container, mirroring the local setup documented in the README.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: zicket
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+      neon-proxy:
+        image: ghcr.io/timowilhelm/local-neon-http-proxy:main
+        env:
+          PG_CONNECTION_STRING: postgres://postgres:postgres@postgres:5432/zicket
+        ports:
+          - 4444:4444
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/zicket
+      NEON_HTTP_ENDPOINT: http://localhost:4444/sql
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+
+      - name: Apply migrations
+        # drizzle-kit uses the Neon WebSocket driver, which the HTTP proxy does
+        # not serve, so the SQL is applied straight over TCP instead.
+        run: |
+          for f in drizzle/*.sql; do
+            echo "applying $f"
+            psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f "$f"
+          done
+
+      - name: Wait for the Neon HTTP proxy
+        # A bare POST to /sql is rejected without Neon's connection headers, so
+        # this waits on the port rather than on a response body.
+        run: |
+          for _ in $(seq 1 30); do
+            if (exec 3<>/dev/tcp/localhost/4444) 2>/dev/null; then
+              echo "proxy ready"; exit 0
+            fi
+            sleep 2
+          done
+          echo "proxy did not come up"; docker ps -a; exit 1
+
+      - name: Build
+        run: pnpm build
+
+  chain:
+    name: Contract e2e on devnet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: software-mansion/setup-scarb@v1
+        with:
+          scarb-version: ${{ env.SCARB_VERSION }}
+          scarb-lock: contracts/Scarb.lock
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # deploy.ts reads the Sierra and CASM artifacts, which are not committed.
+      - name: Build contracts
+        run: pnpm contracts:build
+
+      - name: Start devnet
+        run: |
+          pnpm chain:devnet
+          for _ in $(seq 1 30); do
+            if curl -sf -o /dev/null http://localhost:5050/is_alive; then
+              echo "devnet ready"; exit 0
+            fi
+            sleep 2
+          done
+          echo "devnet did not come up"; docker logs zicket-devnet; exit 1
+
+      - name: Deploy
+        run: pnpm chain:deploy
+
+      - name: End-to-end assertions
+        run: pnpm chain:e2e
+
+      - if: failure()
+        run: docker logs zicket-devnet

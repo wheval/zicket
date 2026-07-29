@@ -1,0 +1,22 @@
+{
+  "network": "sepolia",
+  "chainId": "0x534e5f5345504f4c4941",
+  "rpcUrl": "https://api.cartridge.gg/x/starknet/sepolia",
+  "deployer": "0x6b4ff7d3d4ec97092b655ca7569598583e6e7c236ea37c23cc2664725687994",
+  "feeRecipient": "0x6b4ff7d3d4ec97092b655ca7569598583e6e7c236ea37c23cc2664725687994",
+  "platformFeeBps": 250,
+  "deployedAt": "2026-07-29T07:41:49.773Z",
+  "contracts": {
+    "ZicketEvents": {
+      "address": "0x7b318fc47e158025e02cb41c6b6ae74d214e1d5b8c58241b09f8b0b452b8cbb",
+      "classHash": "0x7389d6d0d3eb5d56d385941bb3562b74f386ef1cb04155662b6bb2a192e809d"
+    },
+    "PaymentToken": {
+      "address": "0x785ab439b53aa6452deaa13a8bbaca43004284e6c3bebadf07f8ebb73333f15",
+      "classHash": "0x257e94e709dacfa2091a4ffa8fb8744d2a3c572429abf04d94202dc15681720",
+      "symbol": "ZUSD",
+      "decimals": 18,
+      "mock": true
+    }
+  }
+}

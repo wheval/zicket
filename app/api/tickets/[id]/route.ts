@@ -38,6 +38,9 @@ export async function GET(_req: Request, { params }: Props) {
       paid: item.paid,
       price_in_usd: Number(item.priceInUsd),
       event_verified: item.eventVerified,
+      onchain_event_id: item.onchainEventId,
+      metadata_hash: item.metadataHash,
+      organizer_address: item.organizerAddress,
     },
   });
 }
